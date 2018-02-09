@@ -16,9 +16,9 @@ Installation
 
         //= require trumbowyg/trumbowyg
 
-   *Optional* - Include any supported language packs from [this list](https://github.com/TikiTDO/trumbowyg-rails/tree/master/vendor/assets/javascripts/trumbowyg/langs):
+   *Optional* - Include any supported language packs from [this list](https://github.com/Alex-D/Trumbowyg/tree/develop/src/langs):
 
-        //= require trumbowyg/vendor/langs/fr
+        //= require trumbowyg/vendor/langs/de
 
 3. Require the Stylesheets in `app/assets/stylesheets`:
 
