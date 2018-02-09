@@ -3,7 +3,7 @@ Trumbowyg Rails
 
 Rails asset wrapper for [Trumbowyg](https://github.com/Alex-D/Trumbowyg)
 
-Currently tracking code as of [this change](https://github.com/Alex-D/Trumbowyg/commit/ec11c334d93316f82b6f65ece6f6cfc5af04ca46).
+Currently tracking code as of [this change](https://github.com/Alex-D/Trumbowyg/blob/45372130776111c7abe66d7a75c1ebb3a96ea264/package.json#L5).
 
 Installation
 ============
@@ -34,7 +34,8 @@ In order to sync this repository with the upstream provider use the following wo
 3. Run `gulp build` to generate the sprite files
 4. Copy as follows from `Trumbowyg` => `trumbowyg2-rails`
 
-        /dist/ui/images/* => /vendor/assets/images/trumbowyg/vendor/images
+        /dist/ui/icons.svg => /vendor/assets/images/trumbowyg/vendor/images/icons.svg
         /dist/ui/sass/* => /vendor/assets/stylesheets/trumbowyg/vendor
-        /dist/trumbowyg.min.js => /vendor/assets/javascripts/trumbowyg/vendor
-        /dist/langs/* => /vendor/assets/javascripts/trumbowyg/vendor
+        /dist/trumbowyg.min.js => /vendor/assets/javascripts/trumbowyg/vendor/trumbowyg.js
+        /dist/langs/* => /vendor/assets/javascripts/trumbowyg/vendor/langs/*
+        /dist/plugins/* => /vendor/assets/javascripts/trumbowyg/vendor/plugins/*
