@@ -35,6 +35,6 @@ In order to sync this repository with the upstream provider use the following wo
 4. Copy as follows from `Trumbowyg` => `trumbowyg2-rails`
 
         /dist/ui/images/* => /vendor/assets/images/trumbowyg/vendor/images
-        /src/ui/sass/* => /vendor/assets/stylesheets/trumbowyg/vendor
-        /src/trumbowyg.js => /vendor/assets/javascripts/trumbowyg/vendor
-        /src/langs/* => /vendor/assets/javascripts/trumbowyg/vendor
+        /dist/ui/sass/* => /vendor/assets/stylesheets/trumbowyg/vendor
+        /dist/trumbowyg.min.js => /vendor/assets/javascripts/trumbowyg/vendor
+        /dist/langs/* => /vendor/assets/javascripts/trumbowyg/vendor
