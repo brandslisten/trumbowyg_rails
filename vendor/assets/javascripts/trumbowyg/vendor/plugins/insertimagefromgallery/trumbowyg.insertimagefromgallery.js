@@ -19,7 +19,7 @@
                 insertImageFromGallery: 'Insert From Gallery'
             },
             de: {
-                insertImageFromGallery: 'Aus Gallerie einfügen'
+                insertImageFromGallery: 'Aus Gallerie'
             },
         },
         plugins: {
