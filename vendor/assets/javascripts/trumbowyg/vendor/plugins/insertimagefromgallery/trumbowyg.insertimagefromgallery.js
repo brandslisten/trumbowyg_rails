@@ -42,6 +42,10 @@
 
                             node.on("bl.backend.blocks.assets:select", function(e, data) {
                               trumbowyg.execCmd('insertImage', data.path, undefined, true);
+                              var $img = $('img[src="' + data.path + '"]', trumbowyg.$box);
+                              $img.attr('alt', data.description);
+                              $img.attr('data-asset-id', data.id);
+                              $img.attr('data-copyright', data.copyright_owner);
                             });
 
                             $("body").append(node);
