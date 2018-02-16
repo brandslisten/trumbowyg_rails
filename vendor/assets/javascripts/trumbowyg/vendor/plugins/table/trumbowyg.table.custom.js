@@ -194,6 +194,10 @@
                     };
 
                     var addRow = {
+                      title: trumbowyg.lang['tableAddRow'],
+                      text: '<i class="fa fa-plus m-r" /> ' + trumbowyg.lang['tableAddRow'],
+                      hasIcon: false,
+
                         fn: function () {
                           trumbowyg.saveRange();
 
@@ -214,6 +218,10 @@
                     };
 
                     var addColumn = {
+                      title: trumbowyg.lang['tableAddColumn'],
+                      text: '<i class="fa fa-plus m-r" /> ' + trumbowyg.lang['tableAddColumn'],
+                      hasIcon: false,
+
                       fn: function () {
                           trumbowyg.saveRange();
 
@@ -232,6 +240,10 @@
                     };
 
                     var destroy = {
+                      title: trumbowyg.lang['tableDestroy'],
+                      text: '<i class="fa fa-times m-r" /> ' + trumbowyg.lang['tableDestroy'],
+                      hasIcon: false,
+
                       fn: function () {
                           trumbowyg.saveRange();
 
@@ -249,6 +261,10 @@
                     };
 
                     var deleteRow = {
+                      title: trumbowyg.lang['tableDeleteRow'],
+                      text: '<i class="fa fa-minus m-r" /> ' + trumbowyg.lang['tableDeleteRow'],
+                      hasIcon: false,
+
                       fn: function () {
                           trumbowyg.saveRange();
 
@@ -262,6 +278,10 @@
                     };
 
                     var deleteColumn = {
+                      title: trumbowyg.lang['tableDeleteColumn'],
+                      text: '<i class="fa fa-minus m-r" /> ' + trumbowyg.lang['tableDeleteColumn'],
+                      hasIcon: false,
+
                       fn: function () {
                           trumbowyg.saveRange();
 
