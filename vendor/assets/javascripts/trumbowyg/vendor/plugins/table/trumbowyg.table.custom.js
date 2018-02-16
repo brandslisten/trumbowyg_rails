@@ -22,8 +22,11 @@
         langs: {
             en: {
                 table: 'Insert table',
-                tableAddRow: 'Add rows',
-                tableAddColumn: 'Add columns',
+                tableAddRow: 'Add row',
+                tableAddColumn: 'Add column',
+                tableDeleteRow: 'Delete row',
+                tableDeleteColumn: 'Delete column',
+                tableDestroy: 'Delete table',
                 rows: 'Rows',
                 columns: 'Columns',
                 styler: 'Table class',
@@ -33,6 +36,9 @@
               table: 'Tabelle einfügen',
               tableAddRow: 'Zeile hinzufügen',
               tableAddColumn: 'Spalte hinzufügen',
+              tableDeleteRow: 'Zeile löschen',
+              tableDeleteColumn: 'Spalte löschen',
+              tableDestroy: 'Tabelle löschen',
               rows: 'Zeilen',
               columns: 'Spalten',
               styler: 'Tabellen Klasse',
@@ -123,6 +129,9 @@
                           if (trumbowyg.$box.find(".trumbowyg-table-button").hasClass('trumbowyg-active-button')) {
                             $dropdown.append(trumbowyg.buildSubBtn('tableAddRow'));
                             $dropdown.append(trumbowyg.buildSubBtn('tableAddColumn'));
+                            $dropdown.append(trumbowyg.buildSubBtn('tableDeleteRow'));
+                            $dropdown.append(trumbowyg.buildSubBtn('tableDeleteColumn'));
+                            $dropdown.append(trumbowyg.buildSubBtn('tableDestroy'));
                           } else {
                             var tableSelect = $('<table></table>');
                             for (var i = 0; i < trumbowyg.o.plugins.table.rows; i += 1) {
@@ -159,7 +168,10 @@
                     };
 
                     var tableBuild = function(column_event) {
-                      var tabler = $('<table class="table"></table>');
+                      var tabler = $('<table></table>');
+                      if (trumbowyg.o.plugins.table.styler) {
+                        tabler.attr('class', trumbowyg.o.plugins.table.styler);
+                      }
 
                       var column = $(column_event.target),
                           colIndex = this.cellIndex,
@@ -181,12 +193,7 @@
                           trumbowyg.saveRange();
 
                           var node = trumbowyg.doc.getSelection().focusNode.parentNode;
-                          var table = node;
-                          if (node.tagName == "TD") {
-                            table = node.parentNode.parentNode;
-                          } else if (node.tagName == "TR") {
-                            table = node.parentNode;
-                          }
+                          var table = fetchTable(node);
 
                           var row = $('<tr></tr>');
                           // add columns according to current columns count
@@ -206,12 +213,7 @@
                           trumbowyg.saveRange();
 
                           var node = trumbowyg.doc.getSelection().focusNode.parentNode;
-                          var table = node;
-                          if (node.tagName == "TD") {
-                            table = node.parentNode.parentNode;
-                          } else if (node.tagName == "TR") {
-                            table = node.parentNode;
-                          }
+                          var table = fetchTable(node);
 
                           // add columns according to current rows count
                           for (var i = 0; i < table.childElementCount; i += 1) {
@@ -224,9 +226,85 @@
                       }
                     };
 
+                    var destroy = {
+                      fn: function () {
+                          trumbowyg.saveRange();
+
+                          var node = trumbowyg.doc.getSelection().focusNode.parentNode;
+                          var table = fetchTable(node);
+
+                          if (table.tagName == "TBODY") {
+                            table = table.parentNode;
+                          }
+
+                          table.remove();
+
+                          return true;
+                      }
+                    };
+
+                    var deleteRow = {
+                      fn: function () {
+                          trumbowyg.saveRange();
+
+                          var node = trumbowyg.doc.getSelection().focusNode.parentNode;
+                          var row = fetchRow(node);
+
+                          row.remove();
+
+                          return true;
+                      }
+                    };
+
+                    var deleteColumn = {
+                      fn: function () {
+                          trumbowyg.saveRange();
+
+                          var node = trumbowyg.doc.getSelection().focusNode;
+                          var table = fetchTable(node);
+                          var td = fetchCol(node);
+                          var colIndex = td.cellIndex;
+
+                          // delete columns according to current rows count
+                          for (var i = 0; i < table.childElementCount; i += 1) {
+                            var row = table.childNodes[i];
+                            row.childNodes[colIndex].remove();
+                          }
+
+                          return true;
+                      }
+                    };
+
+                    var fetchTable = function(node) {
+                      if (node.tagName != "TBODY") {
+                        return fetchTable(node.parentNode);
+                      } else {
+                        return node;
+                      }
+                    };
+
+                    var fetchRow = function(node) {
+                      if (node.tagName != "TR") {
+                        return fetchRow(node.parentNode);
+                      } else {
+                        return node;
+                      }
+                    };
+
+                    var fetchCol = function(node) {
+                      if (node.tagName != "TD") {
+                        return fetchCol(node.parentNode);
+                      } else {
+                        return node;
+                      }
+                    };
+
                     trumbowyg.addBtnDef('table', tableDropdown);
                     trumbowyg.addBtnDef('tableAddRow', addRow);
                     trumbowyg.addBtnDef('tableAddColumn', addColumn);
+                    trumbowyg.addBtnDef('tableDeleteRow', deleteRow);
+                    trumbowyg.addBtnDef('tableDeleteColumn', deleteColumn);
+                    trumbowyg.addBtnDef('tableDestroy', destroy);
                 }
             }
         }
