@@ -118,7 +118,9 @@
                           dropdownOptions['data-' + dropdownPrefix] = btnName;
                           var $dropdown = $('<div/>', dropdownOptions);
 
-                          if ($("." + dropdownPrefix + "-" + btnName).length != 0) {
+                          if ($("." + dropdownPrefix + "-" + btnName).length == 0) {
+                            trumbowyg.$box.append($dropdown.hide());
+                          } else {
                             $dropdown = $("." + dropdownPrefix + "-" + btnName);
                           }
 
@@ -144,7 +146,7 @@
                             tableSelect.find('td').on('mousedown', tableBuild);
 
                             $dropdown.append(tableSelect);
-                            trumbowyg.$box.append($dropdown.hide());
+                            $dropdown.append($('<center>1x1</center>'));
                           }
 
                           trumbowyg.dropdown(btnName);
@@ -165,6 +167,9 @@
                           table.find("tr:nth-of-type("+(i+1)+")").find("td:nth-of-type("+(j+1)+")").addClass('active');
                         }
                       }
+
+                      // set label
+                      table.next('center').html((colIndex+1) + "x" + (rowIndex+1));
                     };
 
                     var tableBuild = function(column_event) {
