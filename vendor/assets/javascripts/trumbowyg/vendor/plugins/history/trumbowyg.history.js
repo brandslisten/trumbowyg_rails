@@ -11,7 +11,8 @@
     // You should not overwrite these internal used variables!
     var defaultOptions = {
         _stack: [],
-        _index: -1
+        _index: -1,
+        _focusEl: undefined
     };
 
     'use strict';
@@ -80,18 +81,21 @@
                           focusEl = trumbowyg.doc.getSelection().focusNode,
                           focusElText = "",
                           latestStateTagsList,
-                          newStateTagsList;
+                          newStateTagsList,
+                          prevFocusEl = trumbowyg.o.plugins.history._focusEl;
 
                       latestStateTagsList = $("<div>" + latestState + "</div>").find("*").map(function() { return this.localName; });
                       newStateTagsList = $("<div>" + newState + "</div>").find("*").map(function() { return this.localName; });
                       if (focusEl) {
+                        trumbowyg.o.plugins.history._focusEl = focusEl;
                         focusElText = focusEl.outerHTML || focusEl.textContent;
                       }
 
                       if ($.inArray(newState, trumbowyg.o.plugins.history._stack) == -1) {
                         // a new stack entry is defined when current insert ends on a whitespace character
                         // or count of node elements has been changed
-                        if(focusElText.slice(-1).match(/\s/) || !arraysAreIdentical(latestStateTagsList,newStateTagsList) || trumbowyg.o.plugins.history._index <= 0) {
+                        // or focused element differs from previous one
+                        if(focusElText.slice(-1).match(/\s/) || !arraysAreIdentical(latestStateTagsList,newStateTagsList) || trumbowyg.o.plugins.history._index <= 0 || focusEl != prevFocusEl) {
                           trumbowyg.o.plugins.history._index = ++trumbowyg.o.plugins.history._index;
                           // remove newer entries in history when something new was added
                           // because timeline was changes with interaction
@@ -107,7 +111,6 @@
 
                         toggleButtonStates();
                       }
-
                     };
 
                     var initButtonStates = function() {
