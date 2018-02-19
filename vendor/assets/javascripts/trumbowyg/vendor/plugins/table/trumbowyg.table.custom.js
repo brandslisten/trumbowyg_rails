@@ -121,7 +121,7 @@
                           if ($("." + dropdownPrefix + "-" + btnName).length == 0) {
                             trumbowyg.$box.append($dropdown.hide());
                           } else {
-                            $dropdown = $("." + dropdownPrefix + "-" + btnName);
+                            $dropdown = trumbowyg.$box.find("." + dropdownPrefix + "-" + btnName);
                           }
 
                           // clear dropdown

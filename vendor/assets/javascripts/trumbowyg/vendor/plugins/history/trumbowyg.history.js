@@ -38,7 +38,7 @@
                         title: trumbowyg.lang.history['redo'],
                         ico: 'redo',
                         key: 'Y',
-                        fn: function () {
+                        fn: function (btn) {
                           if (trumbowyg.o.plugins.history._index < trumbowyg.o.plugins.history._stack.length - 1) {
                             var index = ++trumbowyg.o.plugins.history._index;
                             var newState = trumbowyg.o.plugins.history._stack[index];
@@ -49,6 +49,7 @@
                             trumbowyg.o.plugins.history._stack[index] = trumbowyg.$ed.html();
 
                             carretToEnd();
+                            toggleButtonStates();
                           }
                         }
                     };
@@ -57,7 +58,7 @@
                         title: trumbowyg.lang.history['undo'],
                         ico: 'undo',
                         key: 'Z',
-                        fn: function () {
+                        fn: function (btn) {
                           if (trumbowyg.o.plugins.history._index > 0) {
                             var index = --trumbowyg.o.plugins.history._index;
                             var newState = trumbowyg.o.plugins.history._stack[index];
@@ -68,6 +69,7 @@
                             trumbowyg.o.plugins.history._stack[index] = trumbowyg.$ed.html();
 
                             carretToEnd();
+                            toggleButtonStates();
                           }
                         }
                     };
@@ -102,8 +104,35 @@
                           // modify last stack entry
                           trumbowyg.o.plugins.history._stack[trumbowyg.o.plugins.history._index] = newState;
                         }
+
+                        toggleButtonStates();
                       }
 
+                    };
+
+                    var initButtonStates = function() {
+                      toggleButtonState("historyRedo", false);
+                      toggleButtonState("historyUndo", false);
+                    };
+
+                    var toggleButtonStates = function() {
+                      var index = trumbowyg.o.plugins.history._index,
+                          stackSize = trumbowyg.o.plugins.history._stack.length,
+                          undoState = (index > 0),
+                          redoState = (index != stackSize - 1);
+
+                      toggleButtonState("historyUndo", undoState);
+                      toggleButtonState("historyRedo", redoState);
+                    };
+
+                    var toggleButtonState = function(btn, enable) {
+                      var button = trumbowyg.$box.find(".trumbowyg-" + btn + "-button");
+
+                      if (enable) {
+                        button.removeClass("trumbowyg-disable");
+                      } else if(!button.hasClass("trumbowyg-disable")) {
+                        button.addClass("trumbowyg-disable");
+                      }
                     };
 
                     var arraysAreIdentical = function(a, b) {
@@ -129,6 +158,7 @@
                       }
                     };
 
+                    trumbowyg.$c.on('tbwinit', initButtonStates);
                     trumbowyg.$c.on('tbwinit tbwchange', pushToHistory);
 
                     trumbowyg.addBtnDef('historyRedo', btnBuildDefRedo);
