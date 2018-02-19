@@ -76,7 +76,10 @@
                     };
 
                     var pushToHistory = function(e) {
-                      var latestState = trumbowyg.o.plugins.history._stack.slice(-1)[0] || "<p></p>",
+                      var index = trumbowyg.o.plugins.history._index,
+                          stack = trumbowyg.o.plugins.history._stack,
+                          latestState = stack.slice(-1)[0] || "<p></p>",
+                          prevState = stack[index],
                           newState = trumbowyg.$ed.html(),
                           focusEl = trumbowyg.doc.getSelection().focusNode,
                           focusElText = "",
@@ -91,7 +94,7 @@
                         focusElText = focusEl.outerHTML || focusEl.textContent;
                       }
 
-                      if ($.inArray(newState, trumbowyg.o.plugins.history._stack) == -1) {
+                      if (newState != prevState) {
                         // a new stack entry is defined when current insert ends on a whitespace character
                         // or count of node elements has been changed
                         // or focused element differs from previous one
