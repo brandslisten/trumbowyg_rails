@@ -173,6 +173,8 @@
                     };
 
                     var tableBuild = function(column_event) {
+                      trumbowyg.saveRange();
+
                       var tabler = $('<table></table>');
                       if (trumbowyg.o.plugins.table.styler) {
                         tabler.attr('class', trumbowyg.o.plugins.table.styler);
@@ -201,17 +203,18 @@
                         fn: function () {
                           trumbowyg.saveRange();
 
-                          var node = trumbowyg.doc.getSelection().focusNode.parentNode;
-                          var table = fetchTable(node);
+                          var node = trumbowyg.doc.getSelection().focusNode;
+                          var table = $(node).closest('table');
 
-                          var row = $('<tr></tr>');
-                          // add columns according to current columns count
-                          for (var i = 0; i < table.childNodes[0].childElementCount; i += 1) {
-                            $('<td></td>').appendTo(row);
+                          if(table.length > 0) {
+                            var row = $('<tr></tr>');
+                            // add columns according to current columns count
+                            for (var i = 0; i < table.find('tr')[0].childElementCount; i += 1) {
+                              $('<td></td>').appendTo(row);
+                            }
+                            // add row to table
+                            row.appendTo(table);
                           }
-
-                          // add row to table
-                          table.appendChild(row[0]);
 
                           return true;
                         }
@@ -225,14 +228,13 @@
                       fn: function () {
                           trumbowyg.saveRange();
 
-                          var node = trumbowyg.doc.getSelection().focusNode.parentNode;
-                          var table = fetchTable(node);
+                          var node = trumbowyg.doc.getSelection().focusNode;
+                          var table = $(node).closest('table');
 
-                          // add columns according to current rows count
-                          for (var i = 0; i < table.childElementCount; i += 1) {
-                            var row = table.childNodes[i];
-                            var col = $('<td></td>')
-                            row.appendChild(col[0]);
+                          if(table.length > 0) {
+                            $(table).find('tr').each(function() {
+                              $(this).find('td:last').after('<td></td>');
+                            });
                           }
 
                           return true;
@@ -247,12 +249,8 @@
                       fn: function () {
                           trumbowyg.saveRange();
 
-                          var node = trumbowyg.doc.getSelection().focusNode.parentNode;
-                          var table = fetchTable(node);
-
-                          if (table.tagName == "TBODY") {
-                            table = table.parentNode;
-                          }
+                          var node = trumbowyg.doc.getSelection().focusNode;
+                          var table = $(node).closest('table');
 
                           table.remove();
 
@@ -268,8 +266,8 @@
                       fn: function () {
                           trumbowyg.saveRange();
 
-                          var node = trumbowyg.doc.getSelection().focusNode.parentNode;
-                          var row = fetchRow(node);
+                          var node = trumbowyg.doc.getSelection().focusNode;
+                          var row = $(node).closest('tr');
 
                           row.remove();
 
@@ -286,41 +284,15 @@
                           trumbowyg.saveRange();
 
                           var node = trumbowyg.doc.getSelection().focusNode;
-                          var table = fetchTable(node);
-                          var td = fetchCol(node);
-                          var colIndex = td.cellIndex;
+                          var table = $(node).closest('table');
+                          var td = $(node).closest('td');
+                          var cellIndex = td.index();
 
-                          // delete columns according to current rows count
-                          for (var i = 0; i < table.childElementCount; i += 1) {
-                            var row = table.childNodes[i];
-                            row.childNodes[colIndex].remove();
-                          }
+                          $(table).find('tr').each(function() {
+                            $(this).find('td:eq('+cellIndex+')').remove();
+                          });
 
                           return true;
-                      }
-                    };
-
-                    var fetchTable = function(node) {
-                      if (node.tagName != "TBODY") {
-                        return fetchTable(node.parentNode);
-                      } else {
-                        return node;
-                      }
-                    };
-
-                    var fetchRow = function(node) {
-                      if (node.tagName != "TR") {
-                        return fetchRow(node.parentNode);
-                      } else {
-                        return node;
-                      }
-                    };
-
-                    var fetchCol = function(node) {
-                      if (node.tagName != "TD") {
-                        return fetchCol(node.parentNode);
-                      } else {
-                        return node;
                       }
                     };
 
