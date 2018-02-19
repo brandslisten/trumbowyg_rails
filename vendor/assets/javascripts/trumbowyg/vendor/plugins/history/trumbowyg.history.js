@@ -44,6 +44,10 @@
                             var newState = trumbowyg.o.plugins.history._stack[index];
 
                             trumbowyg.execCmd('html', newState);
+                            // because of some semantic optimisations we have to save the state back
+                            // to history
+                            trumbowyg.o.plugins.history._stack[index] = trumbowyg.$ed.html();
+
                             carretToEnd();
                           }
                         }
@@ -59,6 +63,10 @@
                             var newState = trumbowyg.o.plugins.history._stack[index];
 
                             trumbowyg.execCmd('html', newState);
+                            // because of some semantic optimisations we have to save the state back
+                            // to history
+                            trumbowyg.o.plugins.history._stack[index] = trumbowyg.$ed.html();
+
                             carretToEnd();
                           }
                         }
@@ -69,11 +77,11 @@
                           newState = trumbowyg.$ed.html(),
                           focusEl = trumbowyg.doc.getSelection().focusNode,
                           focusElText = "",
-                          latestStateTagsCount,
-                          newStateTagsCount;
+                          latestStateTagsList,
+                          newStateTagsList;
 
-                      latestStateTagsCount = $("<div>" + latestState + "</div>")[0].querySelectorAll("*").length;
-                      newStateTagsCount = trumbowyg.$ed[0].querySelectorAll("*").length;
+                      latestStateTagsList = $("<div>" + latestState + "</div>").find("*").map(function() { return this.localName; });
+                      newStateTagsList = $("<div>" + newState + "</div>").find("*").map(function() { return this.localName; });
                       if (focusEl) {
                         focusElText = focusEl.outerHTML || focusEl.textContent;
                       }
@@ -81,7 +89,7 @@
                       if ($.inArray(newState, trumbowyg.o.plugins.history._stack) == -1) {
                         // a new stack entry is defined when current insert ends on a whitespace character
                         // or count of node elements has been changed
-                        if(focusElText.slice(-1).match(/\s/) || (latestStateTagsCount != newStateTagsCount) || trumbowyg.o.plugins.history._index <= 0) {
+                        if(focusElText.slice(-1).match(/\s/) || !arraysAreIdentical(latestStateTagsList,newStateTagsList) || trumbowyg.o.plugins.history._index <= 0) {
                           trumbowyg.o.plugins.history._index = ++trumbowyg.o.plugins.history._index;
                           // remove newer entries in history when something new was added
                           // because timeline was changes with interaction
@@ -96,6 +104,17 @@
                         }
                       }
 
+                    };
+
+                    var arraysAreIdentical = function(a, b) {
+                      if (a === b) return true;
+                      if (a == null || b == null) return false;
+                      if (a.length != b.length) return false;
+
+                      for (var i = 0; i < a.length; ++i) {
+                        if (a[i] !== b[i]) return false;
+                      }
+                      return true;
                     };
 
                     var carretToEnd = function() {
