@@ -193,6 +193,7 @@
 
                       trumbowyg.range.deleteContents();
                       trumbowyg.range.insertNode(tabler[0]);
+                      trumbowyg.$c.trigger('tbwchange');
                     };
 
                     var addRow = {
