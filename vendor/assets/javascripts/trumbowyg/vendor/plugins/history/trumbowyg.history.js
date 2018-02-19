@@ -17,13 +17,13 @@
     'use strict';
     $.extend(true, $.trumbowyg, {
         langs: {
-            en: {
+            de: {
                 history: {
                   redo: 'Wiederholen',
                   undo: 'Rückgängig'
                 }
             },
-            de: {
+            en: {
               history: {
                 redo: 'Redo',
                 undo: 'Undo'
