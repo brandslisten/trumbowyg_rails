@@ -7,14 +7,6 @@
  */
 
 (function ($) {
-
-    // You should not overwrite these internal used variables!
-    var defaultOptions = {
-        _stack: [],
-        _index: -1,
-        _focusEl: undefined
-    };
-
     'use strict';
     $.extend(true, $.trumbowyg, {
         langs: {
@@ -34,20 +26,27 @@
         plugins: {
             history: {
                 init: function (trumbowyg) {
-                    trumbowyg.o.plugins.history = $.extend(true, {}, defaultOptions, trumbowyg.o.plugins.history || {});
+                    var t = trumbowyg;
+
+                    t.o.plugins.history = $.extend(true, {
+                      _stack: [],
+                      _index: -1,
+                      _focusEl: undefined
+                    }, t.o.plugins.history || {});
+
                     var btnBuildDefRedo = {
-                        title: trumbowyg.lang.history['redo'],
+                        title: t.lang.history['redo'],
                         ico: 'redo',
                         key: 'Y',
                         fn: function (btn) {
-                          if (trumbowyg.o.plugins.history._index < trumbowyg.o.plugins.history._stack.length - 1) {
-                            var index = ++trumbowyg.o.plugins.history._index;
-                            var newState = trumbowyg.o.plugins.history._stack[index];
+                          if (t.o.plugins.history._index < t.o.plugins.history._stack.length - 1) {
+                            var index = ++t.o.plugins.history._index;
+                            var newState = t.o.plugins.history._stack[index];
 
-                            trumbowyg.execCmd('html', newState);
+                            t.execCmd('html', newState);
                             // because of some semantic optimisations we have to save the state back
                             // to history
-                            trumbowyg.o.plugins.history._stack[index] = trumbowyg.$ed.html();
+                            t.o.plugins.history._stack[index] = t.$ed.html();
 
                             carretToEnd();
                             toggleButtonStates();
@@ -56,18 +55,18 @@
                     };
 
                     var btnBuildDefUndo = {
-                        title: trumbowyg.lang.history['undo'],
+                        title: t.lang.history['undo'],
                         ico: 'undo',
                         key: 'Z',
                         fn: function (btn) {
-                          if (trumbowyg.o.plugins.history._index > 0) {
-                            var index = --trumbowyg.o.plugins.history._index;
-                            var newState = trumbowyg.o.plugins.history._stack[index];
+                          if (t.o.plugins.history._index > 0) {
+                            var index = --t.o.plugins.history._index,
+                                newState = t.o.plugins.history._stack[index];
 
-                            trumbowyg.execCmd('html', newState);
+                            t.execCmd('html', newState);
                             // because of some semantic optimisations we have to save the state back
                             // to history
-                            trumbowyg.o.plugins.history._stack[index] = trumbowyg.$ed.html();
+                            t.o.plugins.history._stack[index] = t.$ed.html();
 
                             carretToEnd();
                             toggleButtonStates();
@@ -76,21 +75,22 @@
                     };
 
                     var pushToHistory = function(e) {
-                      var index = trumbowyg.o.plugins.history._index,
-                          stack = trumbowyg.o.plugins.history._stack,
+                      var index = t.o.plugins.history._index,
+                          stack = t.o.plugins.history._stack,
                           latestState = stack.slice(-1)[0] || "<p></p>",
                           prevState = stack[index],
-                          newState = trumbowyg.$ed.html(),
-                          focusEl = trumbowyg.doc.getSelection().focusNode,
+                          newState = t.$ed.html(),
+                          focusEl = t.doc.getSelection().focusNode,
                           focusElText = "",
                           latestStateTagsList,
                           newStateTagsList,
-                          prevFocusEl = trumbowyg.o.plugins.history._focusEl;
+                          prevFocusEl = t.o.plugins.history._focusEl,
+                          limit = t.o.plugins.history.limit;
 
                       latestStateTagsList = $("<div>" + latestState + "</div>").find("*").map(function() { return this.localName; });
                       newStateTagsList = $("<div>" + newState + "</div>").find("*").map(function() { return this.localName; });
                       if (focusEl) {
-                        trumbowyg.o.plugins.history._focusEl = focusEl;
+                        t.o.plugins.history._focusEl = focusEl;
                         focusElText = focusEl.outerHTML || focusEl.textContent;
                       }
 
@@ -98,41 +98,39 @@
                         // a new stack entry is defined when current insert ends on a whitespace character
                         // or count of node elements has been changed
                         // or focused element differs from previous one
-                        if(focusElText.slice(-1).match(/\s/) || !arraysAreIdentical(latestStateTagsList,newStateTagsList) || trumbowyg.o.plugins.history._index <= 0 || focusEl != prevFocusEl) {
-                          trumbowyg.o.plugins.history._index = ++trumbowyg.o.plugins.history._index;
+                        if(focusElText.slice(-1).match(/\s/) ||
+                          !arraysAreIdentical(latestStateTagsList,newStateTagsList) ||
+                          t.o.plugins.history._index <= 0 || focusEl != prevFocusEl)
+                        {
+                          t.o.plugins.history._index++;
                           // remove newer entries in history when something new was added
                           // because timeline was changes with interaction
-                          trumbowyg.o.plugins.history._stack = trumbowyg.o.plugins.history._stack.slice(
-                            0, trumbowyg.o.plugins.history._index
+                          t.o.plugins.history._stack = stack.slice(
+                            0, t.o.plugins.history._index
                           );
                           // now add new state to modifed history
-                          trumbowyg.o.plugins.history._stack.push(newState);
+                          t.o.plugins.history._stack.push(newState);
                         } else {
                           // modify last stack entry
-                          trumbowyg.o.plugins.history._stack[trumbowyg.o.plugins.history._index] = newState;
+                          t.o.plugins.history._stack[index] = newState;
                         }
 
                         toggleButtonStates();
                       }
                     };
 
-                    var initButtonStates = function() {
-                      toggleButtonState("historyRedo", false);
-                      toggleButtonState("historyUndo", false);
-                    };
-
                     var toggleButtonStates = function() {
-                      var index = trumbowyg.o.plugins.history._index,
-                          stackSize = trumbowyg.o.plugins.history._stack.length,
+                      var index = t.o.plugins.history._index,
+                          stackSize = t.o.plugins.history._stack.length,
                           undoState = (index > 0),
-                          redoState = (index != stackSize - 1);
+                          redoState = (stackSize != 0 && index != stackSize - 1);
 
                       toggleButtonState("historyUndo", undoState);
                       toggleButtonState("historyRedo", redoState);
                     };
 
                     var toggleButtonState = function(btn, enable) {
-                      var button = trumbowyg.$box.find(".trumbowyg-" + btn + "-button");
+                      var button = t.$box.find(".trumbowyg-" + btn + "-button");
 
                       if (enable) {
                         button.removeClass("trumbowyg-disable");
@@ -153,22 +151,21 @@
                     };
 
                     var carretToEnd = function() {
-                      var node = trumbowyg.doc.getSelection().focusNode,
-                          range = trumbowyg.doc.createRange();
+                      var node = t.doc.getSelection().focusNode,
+                          range = t.doc.createRange();
 
                       if(node.childNodes.length > 0) {
                         range.setStartAfter(node.childNodes[node.childNodes.length-1]);
                         range.setEndAfter(node.childNodes[node.childNodes.length-1]);
-                        trumbowyg.doc.getSelection().removeAllRanges();
-                        trumbowyg.doc.getSelection().addRange(range);
+                        t.doc.getSelection().removeAllRanges();
+                        t.doc.getSelection().addRange(range);
                       }
                     };
 
-                    trumbowyg.$c.on('tbwinit', initButtonStates);
-                    trumbowyg.$c.on('tbwinit tbwchange', pushToHistory);
+                    t.$c.on('tbwinit tbwchange', pushToHistory);
 
-                    trumbowyg.addBtnDef('historyRedo', btnBuildDefRedo);
-                    trumbowyg.addBtnDef('historyUndo', btnBuildDefUndo);
+                    t.addBtnDef('historyRedo', btnBuildDefRedo);
+                    t.addBtnDef('historyUndo', btnBuildDefUndo);
                 }
             }
         }

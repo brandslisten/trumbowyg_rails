@@ -27,9 +27,6 @@
                 tableDeleteRow: 'Delete row',
                 tableDeleteColumn: 'Delete column',
                 tableDestroy: 'Delete table',
-                rows: 'Rows',
-                columns: 'Columns',
-                styler: 'Table class',
                 error: 'Error'
             },
             de: {
@@ -39,63 +36,42 @@
               tableDeleteRow: 'Zeile löschen',
               tableDeleteColumn: 'Spalte löschen',
               tableDestroy: 'Tabelle löschen',
-              rows: 'Zeilen',
-              columns: 'Spalten',
-              styler: 'Tabellen Klasse',
               error: 'Error'
             },
             sk: {
                 table: 'Vytvoriť tabuľky',
                 tableAddRow: 'Pridať riadok',
                 tableAddColumn: 'Pridať stĺpec',
-                rows: 'Riadky',
-                columns: 'Stĺpce',
-                styler: 'Tabuľku triedy',
                 error: 'Chyba'
             },
             fr: {
                 table: 'Insérer un tableau',
                 tableAddRow: 'Ajouter des lignes',
                 tableAddColumn: 'Ajouter des colonnes',
-                rows: 'Lignes',
-                columns: 'Colonnes',
-                styler: 'Classes CSS sur la table',
                 error: 'Erreur'
             },
             cs: {
                 table: 'Vytvořit příkaz Table',
                 tableAddRow: 'Přidat řádek',
                 tableAddColumn: 'Přidat sloupec',
-                rows: 'Řádky',
-                columns: 'Sloupce',
-                styler: 'Tabulku třída',
                 error: 'Chyba'
             },
             ru: {
                 table: 'Вставить таблицу',
                 tableAddRow: 'Добавить строки',
                 tableAddColumn: 'Добавить столбцы',
-                rows: 'Строки',
-                columns: 'Столбцы',
-                styler: 'Имя CSS класса для таблицы',
                 error: 'Ошибка'
             },
             ja: {
                 table: '表の挿入',
                 tableAddRow: '行の追加',
                 tableAddColumn: '列の追加',
-                rows: '行',
-                columns: '列',
-                styler: '表のクラス',
                 error: 'エラー'
             },
             tr: {
                 table: 'Tablo ekle',
                 tableAddRow: 'Satır ekle',
                 tableAddColumn: 'Kolon ekle',
-                rows: 'Satırlar',
-                columns: 'Kolonlar',
-                styler: 'Tablo sınıfı',
                 error: 'Hata'
             }
         },
@@ -105,7 +81,7 @@
                 init: function (trumbowyg) {
                     trumbowyg.o.plugins.table = $.extend(true, {}, defaultOptions, trumbowyg.o.plugins.table || {});
 
-                    var tableDropdown = {
+                    var buildButtonDef = {
                         fn: function () {
                           trumbowyg.saveRange();
 
@@ -250,8 +226,8 @@
                       fn: function () {
                           trumbowyg.saveRange();
 
-                          var node = trumbowyg.doc.getSelection().focusNode;
-                          var table = $(node).closest('table');
+                          var node = trumbowyg.doc.getSelection().focusNode,
+                              table = $(node).closest('table');
 
                           table.remove();
 
@@ -267,8 +243,8 @@
                       fn: function () {
                           trumbowyg.saveRange();
 
-                          var node = trumbowyg.doc.getSelection().focusNode;
-                          var row = $(node).closest('tr');
+                          var node = trumbowyg.doc.getSelection().focusNode,
+                              row = $(node).closest('tr');
 
                           row.remove();
 
@@ -284,10 +260,10 @@
                       fn: function () {
                           trumbowyg.saveRange();
 
-                          var node = trumbowyg.doc.getSelection().focusNode;
-                          var table = $(node).closest('table');
-                          var td = $(node).closest('td');
-                          var cellIndex = td.index();
+                          var node = trumbowyg.doc.getSelection().focusNode,
+                              table = $(node).closest('table'),
+                              td = $(node).closest('td'),
+                              cellIndex = td.index();
 
                           $(table).find('tr').each(function() {
                             $(this).find('td:eq('+cellIndex+')').remove();
@@ -297,7 +273,7 @@
                       }
                     };
 
-                    trumbowyg.addBtnDef('table', tableDropdown);
+                    trumbowyg.addBtnDef('table', buildButtonDef);
                     trumbowyg.addBtnDef('tableAddRow', addRow);
                     trumbowyg.addBtnDef('tableAddColumn', addColumn);
                     trumbowyg.addBtnDef('tableDeleteRow', deleteRow);
