@@ -24,25 +24,25 @@
         },
         plugins: {
             insertImageFromGallery: {
-                init: function (trumbowyg) {
-                    trumbowyg.o.plugins.insertImageFromGallery = $.extend(true, {}, defaultOptions, trumbowyg.o.plugins.insertImageFromGallery || {});
+                init: function (t) {
+                    t.o.plugins.insertImageFromGallery = $.extend(true, {}, defaultOptions, t.o.plugins.insertImageFromGallery || {});
                     var btnDef = {
-                        title: trumbowyg.lang['insertImageFromGallery'],
-                        text: '<i class="fa fa-image" style="margin-right: 11px;" /> ' + trumbowyg.lang['insertImageFromGallery'],
+                        title: t.lang['insertImageFromGallery'],
+                        text: '<i class="fa fa-image" style="margin-right: 11px;" /> ' + t.lang['insertImageFromGallery'],
                         hasIcon: false,
                         fn: function () {
-                          trumbowyg.saveRange();
+                          t.saveRange();
 
-                          blRemoteModal(trumbowyg.o.plugins.insertImageFromGallery.serverPath, function(container){
+                          blRemoteModal(t.o.plugins.insertImageFromGallery.serverPath, function(container){
                             container.find('.modal').modal('show');
                           });
 
-                          if ($('#trumbowyg-insert-from-gallery').length == 0) {
-                            node = $('<div style="display: none important!;" id="trumbowyg-insert-from-gallery"></div>');
+                          if ($('#' + t.o.prefix + '-insert-from-gallery').length == 0) {
+                            node = $('<div style="display: none important!;" id="' + t.o.prefix + '-insert-from-gallery"></div>');
 
                             node.on("bl.backend.blocks.assets:select", function(e, data) {
-                              trumbowyg.execCmd('insertImage', data.path, undefined, true);
-                              var $img = $('img[src="' + data.path + '"]', trumbowyg.$box);
+                              t.execCmd('insertImage', data.path, undefined, true);
+                              var $img = $('img[src="' + data.path + '"]', t.$box);
                               $img.attr('alt', data.description);
                               $img.attr('data-asset-id', data.id);
                               $img.attr('data-copyright', data.copyright_owner);
@@ -54,7 +54,7 @@
                         }
                     };
 
-                    trumbowyg.addBtnDef('insertImageFromGallery', btnDef);
+                    t.addBtnDef('insertImageFromGallery', btnDef);
                 }
             }
         }

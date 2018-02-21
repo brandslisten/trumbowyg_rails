@@ -78,43 +78,43 @@
 
         plugins: {
             table: {
-                init: function (trumbowyg) {
-                    trumbowyg.o.plugins.table = $.extend(true, {}, defaultOptions, trumbowyg.o.plugins.table || {});
+                init: function (t) {
+                    t.o.plugins.table = $.extend(true, {}, defaultOptions, t.o.plugins.table || {});
 
                     var buildButtonDef = {
                         fn: function () {
-                          trumbowyg.saveRange();
+                          t.saveRange();
 
                           var btnName = 'table';
 
-                          var dropdownPrefix = trumbowyg.o.prefix + 'dropdown',
+                          var dropdownPrefix = t.o.prefix + 'dropdown',
                               dropdownOptions = { // the dropdown
-                              class: dropdownPrefix + '-' + btnName + ' ' + dropdownPrefix + ' ' + trumbowyg.o.prefix + 'fixed-top'
+                              class: dropdownPrefix + '-' + btnName + ' ' + dropdownPrefix + ' ' + t.o.prefix + 'fixed-top'
                           };
                           dropdownOptions['data-' + dropdownPrefix] = btnName;
                           var $dropdown = $('<div/>', dropdownOptions);
 
                           if ($("." + dropdownPrefix + "-" + btnName).length == 0) {
-                            trumbowyg.$box.append($dropdown.hide());
+                            t.$box.append($dropdown.hide());
                           } else {
-                            $dropdown = trumbowyg.$box.find("." + dropdownPrefix + "-" + btnName);
+                            $dropdown = t.$box.find("." + dropdownPrefix + "-" + btnName);
                           }
 
                           // clear dropdown
                           $dropdown.html('');
 
                           // when active table show AddRow / AddColumn
-                          if (trumbowyg.$box.find(".trumbowyg-table-button").hasClass('trumbowyg-active-button')) {
-                            $dropdown.append(trumbowyg.buildSubBtn('tableAddRow'));
-                            $dropdown.append(trumbowyg.buildSubBtn('tableAddColumn'));
-                            $dropdown.append(trumbowyg.buildSubBtn('tableDeleteRow'));
-                            $dropdown.append(trumbowyg.buildSubBtn('tableDeleteColumn'));
-                            $dropdown.append(trumbowyg.buildSubBtn('tableDestroy'));
+                          if (t.$box.find("." + t.o.prefix + "-table-button").hasClass(t.o.prefix + '-active-button')) {
+                            $dropdown.append(t.buildSubBtn('tableAddRow'));
+                            $dropdown.append(t.buildSubBtn('tableAddColumn'));
+                            $dropdown.append(t.buildSubBtn('tableDeleteRow'));
+                            $dropdown.append(t.buildSubBtn('tableDeleteColumn'));
+                            $dropdown.append(t.buildSubBtn('tableDestroy'));
                           } else {
                             var tableSelect = $('<table></table>');
-                            for (var i = 0; i < trumbowyg.o.plugins.table.rows; i += 1) {
+                            for (var i = 0; i < t.o.plugins.table.rows; i += 1) {
                               var row = $('<tr></tr>').appendTo(tableSelect);
-                              for (var j = 0; j < trumbowyg.o.plugins.table.columns; j += 1) {
+                              for (var j = 0; j < t.o.plugins.table.columns; j += 1) {
                                 $('<td></td>').appendTo(row);
                               }
                             }
@@ -125,7 +125,7 @@
                             $dropdown.append($('<center>1x1</center>'));
                           }
 
-                          trumbowyg.dropdown(btnName);
+                          t.dropdown(btnName);
                         }
                     };
 
@@ -149,11 +149,11 @@
                     };
 
                     var tableBuild = function(column_event) {
-                      trumbowyg.saveRange();
+                      t.saveRange();
 
                       var tabler = $('<table></table>');
-                      if (trumbowyg.o.plugins.table.styler) {
-                        tabler.attr('class', trumbowyg.o.plugins.table.styler);
+                      if (t.o.plugins.table.styler) {
+                        tabler.attr('class', t.o.plugins.table.styler);
                       }
 
                       var column = $(column_event.target),
@@ -167,20 +167,20 @@
                         }
                       }
 
-                      trumbowyg.range.deleteContents();
-                      trumbowyg.range.insertNode(tabler[0]);
-                      trumbowyg.$c.trigger('tbwchange');
+                      t.range.deleteContents();
+                      t.range.insertNode(tabler[0]);
+                      t.$c.trigger('tbwchange');
                     };
 
                     var addRow = {
-                      title: trumbowyg.lang['tableAddRow'],
-                      text: '<i class="fa fa-plus m-r" /> ' + trumbowyg.lang['tableAddRow'],
+                      title: t.lang['tableAddRow'],
+                      text: '<i class="fa fa-plus m-r" /> ' + t.lang['tableAddRow'],
                       hasIcon: false,
 
                         fn: function () {
-                          trumbowyg.saveRange();
+                          t.saveRange();
 
-                          var node = trumbowyg.doc.getSelection().focusNode;
+                          var node = t.doc.getSelection().focusNode;
                           var table = $(node).closest('table');
 
                           if(table.length > 0) {
@@ -198,14 +198,14 @@
                     };
 
                     var addColumn = {
-                      title: trumbowyg.lang['tableAddColumn'],
-                      text: '<i class="fa fa-plus m-r" /> ' + trumbowyg.lang['tableAddColumn'],
+                      title: t.lang['tableAddColumn'],
+                      text: '<i class="fa fa-plus m-r" /> ' + t.lang['tableAddColumn'],
                       hasIcon: false,
 
                       fn: function () {
-                          trumbowyg.saveRange();
+                          t.saveRange();
 
-                          var node = trumbowyg.doc.getSelection().focusNode;
+                          var node = t.doc.getSelection().focusNode;
                           var table = $(node).closest('table');
 
                           if(table.length > 0) {
@@ -219,14 +219,14 @@
                     };
 
                     var destroy = {
-                      title: trumbowyg.lang['tableDestroy'],
-                      text: '<i class="fa fa-times m-r" /> ' + trumbowyg.lang['tableDestroy'],
+                      title: t.lang['tableDestroy'],
+                      text: '<i class="fa fa-times m-r" /> ' + t.lang['tableDestroy'],
                       hasIcon: false,
 
                       fn: function () {
-                          trumbowyg.saveRange();
+                          t.saveRange();
 
-                          var node = trumbowyg.doc.getSelection().focusNode,
+                          var node = t.doc.getSelection().focusNode,
                               table = $(node).closest('table');
 
                           table.remove();
@@ -236,14 +236,14 @@
                     };
 
                     var deleteRow = {
-                      title: trumbowyg.lang['tableDeleteRow'],
-                      text: '<i class="fa fa-minus m-r" /> ' + trumbowyg.lang['tableDeleteRow'],
+                      title: t.lang['tableDeleteRow'],
+                      text: '<i class="fa fa-minus m-r" /> ' + t.lang['tableDeleteRow'],
                       hasIcon: false,
 
                       fn: function () {
-                          trumbowyg.saveRange();
+                          t.saveRange();
 
-                          var node = trumbowyg.doc.getSelection().focusNode,
+                          var node = t.doc.getSelection().focusNode,
                               row = $(node).closest('tr');
 
                           row.remove();
@@ -253,14 +253,14 @@
                     };
 
                     var deleteColumn = {
-                      title: trumbowyg.lang['tableDeleteColumn'],
-                      text: '<i class="fa fa-minus m-r" /> ' + trumbowyg.lang['tableDeleteColumn'],
+                      title: t.lang['tableDeleteColumn'],
+                      text: '<i class="fa fa-minus m-r" /> ' + t.lang['tableDeleteColumn'],
                       hasIcon: false,
 
                       fn: function () {
-                          trumbowyg.saveRange();
+                          t.saveRange();
 
-                          var node = trumbowyg.doc.getSelection().focusNode,
+                          var node = t.doc.getSelection().focusNode,
                               table = $(node).closest('table'),
                               td = $(node).closest('td'),
                               cellIndex = td.index();
@@ -273,12 +273,12 @@
                       }
                     };
 
-                    trumbowyg.addBtnDef('table', buildButtonDef);
-                    trumbowyg.addBtnDef('tableAddRow', addRow);
-                    trumbowyg.addBtnDef('tableAddColumn', addColumn);
-                    trumbowyg.addBtnDef('tableDeleteRow', deleteRow);
-                    trumbowyg.addBtnDef('tableDeleteColumn', deleteColumn);
-                    trumbowyg.addBtnDef('tableDestroy', destroy);
+                    t.addBtnDef('table', buildButtonDef);
+                    t.addBtnDef('tableAddRow', addRow);
+                    t.addBtnDef('tableAddColumn', addColumn);
+                    t.addBtnDef('tableDeleteRow', deleteRow);
+                    t.addBtnDef('tableDeleteColumn', deleteColumn);
+                    t.addBtnDef('tableDestroy', destroy);
                 }
             }
         }

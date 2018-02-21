@@ -19,13 +19,12 @@
         },
         plugins: {
             externalLink: {
-                init: function (trumbowyg) {
-                  trumbowyg.o.plugins.externalLink = $.extend(true, {}, trumbowyg.o.plugins.externalLink || {});
+                init: function (t) {
+                  t.o.plugins.externalLink = $.extend(true, {}, t.o.plugins.externalLink || {});
                   var btnDef = {
                       ico: 'create-link',
                       fn: function () {
-                        var t = trumbowyg,
-                            documentSelection = t.doc.getSelection(),
+                        var documentSelection = t.doc.getSelection(),
                             node = documentSelection.focusNode,
                             url,
                             title,
@@ -90,7 +89,7 @@
                     }
                 };
 
-                trumbowyg.addBtnDef('createLink', btnDef);
+                t.addBtnDef('createLink', btnDef);
               }
           }
       }

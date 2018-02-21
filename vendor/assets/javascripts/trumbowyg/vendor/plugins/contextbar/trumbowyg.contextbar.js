@@ -19,26 +19,26 @@
     $.extend(true, $.trumbowyg, {
         plugins: {
             contextbar: {
-                init: function (trumbowyg) {
-                  trumbowyg.o.plugins.contextbar = $.extend(true, {}, defaultOptions, trumbowyg.o.plugins.contextbar || {});
+                init: function (t) {
+                  t.o.plugins.contextbar = $.extend(true, {}, defaultOptions, t.o.plugins.contextbar || {});
 
-                  if (!trumbowyg.o.plugins.contextbar.enabled) {
+                  if (!t.o.plugins.contextbar.enabled) {
                     return;
                   }
 
-                  trumbowyg.$c.on('tbwinit', function(){
-                    trumbowyg.$ed.on('click blur', function(){
-                      trumbowyg.$box.find('.trumbowyg-contextbar-pane').remove();
+                  t.$c.on('tbwinit', function(){
+                    t.$ed.on('click blur', function(){
+                      t.$box.find('.' + t.o.prefix + '-contextbar-pane').remove();
                     });
 
-                    trumbowyg.$ed.on('dblclick', function(){
+                    t.$ed.on('dblclick', function(){
                       // get selection
-                      var selection = trumbowyg.doc.getSelection(),
+                      var selection = t.doc.getSelection(),
                           selectedNode = selection.focusNode,
                           selectedText = $(selectedNode).text().slice(selection.anchorOffset,selection.focusOffset),
                           nodeRect = selection.getRangeAt(0).getBoundingClientRect(),
-                          pane = $("<div class='trumbowyg-button-pane trumbowyg-contextbar-pane'></div>"),
-                          edRect = trumbowyg.$ed[0].getBoundingClientRect();
+                          pane = $("<div class='" + t.o.prefix + "-button-pane " + t.o.prefix + "-contextbar-pane'></div>"),
+                          edRect = t.$ed[0].getBoundingClientRect();
 
                       // show nothing when selection has no range
                       if (selection.anchorOffset == selection.focusOffset) {
@@ -47,8 +47,8 @@
 
                       // generate pane
                       if (selectedNode.nodeType == Node.TEXT_NODE) {
-                        $.each(trumbowyg.o.plugins.contextbar.btns.text, function(index, btn) {
-                          pane.append(trumbowyg.buildBtn(btn));
+                        $.each(t.o.plugins.contextbar.btns.text, function(index, btn) {
+                          pane.append(t.buildBtn(btn));
                         });
                       }
 
@@ -62,7 +62,7 @@
                       pane.css('top', (nodeRect.y - edRect.y) + "px" );
 
                       // place context bar on editor box
-                      trumbowyg.$box.append(pane);
+                      t.$box.append(pane);
                     });
                   });
                 }
