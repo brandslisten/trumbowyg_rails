@@ -56,3 +56,47 @@
   box-shadow: none;
   cursor: pointer;
 }
+
+.trumbowyg-contextbar-pane {
+  margin: 0;
+  padding: 0 5px;
+  position: absolute;
+  display: inline-block;
+  list-style-type: none;
+  line-height: 10px;
+  min-height: 36px;
+  min-width: 12px;
+  width: auto;
+  backface-visibility: hidden;
+  z-index: 11;
+
+  background: #fff;
+  color: #00b393;
+  box-shadow: 0 0 18px rgba(0,0,0,0.2);
+  border-radius: 30px;
+  padding: 0 10px;
+  white-space: nowrap;
+
+  button {
+    display: inline-block;
+    position: relative;
+    width: 26px;
+    height: 35px;
+    padding: 1px 6px;
+    margin-bottom: 1px;
+    overflow: hidden;
+    border: none;
+    cursor: pointer;
+    background: none;
+    vertical-align: middle;
+    transition: background-color 150ms, opacity 150ms;
+
+    svg {
+      fill: #00b393;
+      width: 20px;
+      &:hover { fill: #01846c; }
+    }
+
+    &.trumbowyg-active-button svg { fill: #01846c; }
+  }
+}

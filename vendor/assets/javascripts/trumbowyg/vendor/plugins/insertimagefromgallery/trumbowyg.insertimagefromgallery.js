@@ -37,8 +37,8 @@
                             container.find('.modal').modal('show');
                           });
 
-                          if ($('#' + t.o.prefix + '-insert-from-gallery').length == 0) {
-                            node = $('<div style="display: none important!;" id="' + t.o.prefix + '-insert-from-gallery"></div>');
+                          if ($('#' + t.o.prefix + 'insert-from-gallery').length == 0) {
+                            node = $('<div style="display: none important!;" id="' + t.o.prefix + 'insert-from-gallery"></div>');
 
                             node.on("bl.backend.blocks.assets:select", function(e, data) {
                               t.execCmd('insertImage', data.path, undefined, true);

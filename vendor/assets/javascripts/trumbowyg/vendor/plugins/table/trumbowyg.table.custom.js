@@ -104,7 +104,7 @@
                           $dropdown.html('');
 
                           // when active table show AddRow / AddColumn
-                          if (t.$box.find("." + t.o.prefix + "-table-button").hasClass(t.o.prefix + '-active-button')) {
+                          if (t.$box.find("." + t.o.prefix + "table-button").hasClass(t.o.prefix + 'active-button')) {
                             $dropdown.append(t.buildSubBtn('tableAddRow'));
                             $dropdown.append(t.buildSubBtn('tableAddColumn'));
                             $dropdown.append(t.buildSubBtn('tableDeleteRow'));
