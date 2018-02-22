@@ -12,8 +12,10 @@
       enabled: false,
       hideBtnPane: false,
       btns: {
-        text: ['p','blockquote','h2','h3','h4','strong','em','underline','createLink','unlink','justifyLeft','justifyCenter','justifyRight','justifyFull','unorderedList','orderedList'],
-        table: ['tableAddRow','tableAddColumn','tableDeleteRow','tableDeleteColumn','tableDestroy']
+        text: ['p','blockquote','h2','h3','h4','strong','em','underline','createLink','justifyLeft','justifyCenter','justifyRight','justifyFull','unorderedList','orderedList'],
+        table: ['tableAddRow','tableAddColumn','tableDeleteRow','tableDeleteColumn','tableDestroy'],
+        a: ['unlink'],
+        img: ['justifyLeft','justifyCenter','justifyRight']
       }
   };
 
@@ -31,23 +33,64 @@
                   var buildPane = function(selection) {
                     var selection = t.doc.getSelection(),
                         selectedNode = selection.focusNode,
+                        anchorNode = selection.anchorNode,
                         parentNode = selectedNode.parentNode,
-                        selectedText = $(selectedNode).text().slice(selection.anchorOffset,selection.focusOffset),
+                        selectFrom = Math.min(selection.anchorOffset,selection.focusOffset),
+                        selectTo = Math.max(selection.anchorOffset,selection.focusOffset),
+                        selectedText = selectedNode.wholeText,
                         nodeRect = selection.getRangeAt(0).getBoundingClientRect(),
                         pane = $("<div class='" + t.o.prefix + "contextbar-pane'></div>"),
                         edRect = t.$ed[0].getBoundingClientRect(),
                         posX,
                         posY;
 
+                    if (!selection.rangeCount) {
+                      return;
+                    }
+
                     // generate pane
                     if (!selection.isCollapsed && selectedNode.nodeType == Node.TEXT_NODE) {
                       $.each(t.o.plugins.contextbar.btns.text, function(index, btn) {
-                        pane.append(t.buildBtn(btn));
+                        // only add create link when no link surrounds current selection
+                        if (btn != "createLink" || $(selectedNode).parents('a').length == 0) {
+                          pane.append(t.buildBtn(btn));
+                        }
                       });
+
+                      if (selectedNode == anchorNode) {
+                        // correct nodeRect if needed
+                        var textEl = $("<span style='font-size:1em; display:none;'>"+selectedText+"</span>"),
+                            delta = 10,
+                            range = t.doc.createRange();
+
+                        t.$box.append(textEl);
+
+                        if(nodeRect.width > textEl.width() + delta) {
+                          // also fix selection range
+                          range.selectNode(selectedNode);
+                          t.doc.getSelection().removeAllRanges();
+                          t.doc.getSelection().addRange(range);
+
+                          nodeRect = range.getBoundingClientRect();
+                        }
+                        textEl.remove();
+                      }
                     } else if (selectedNode.nodeName == 'TD' || parentNode.nodeName == 'TD') {
-                      nodeRect = $(selectedNode).parents('table')[0].getBoundingClientRect();
+                      nodeRect = $(selectedNode).closest('table')[0].getBoundingClientRect();
 
                       $.each(t.o.plugins.contextbar.btns.table, function(index, btn) {
+                        pane.append(t.buildBtn(btn));
+                      });
+                    } else if (selectedNode.nodeName == 'A' || parentNode.nodeName == 'A') {
+                      nodeRect = $(selectedNode).closest('a')[0].getBoundingClientRect();
+
+                      $.each(t.o.plugins.contextbar.btns.a, function(index, btn) {
+                        pane.append(t.buildBtn(btn));
+                      });
+                    } else if (selectedNode.nodeName == 'IMG' || parentNode.nodeName == 'IMG') {
+                      nodeRect = $(selectedNode).closest('img')[0].getBoundingClientRect();
+
+                      $.each(t.o.plugins.contextbar.btns.img, function(index, btn) {
                         pane.append(t.buildBtn(btn));
                       });
                     } else {
@@ -98,20 +141,23 @@
                   };
 
                   t.$c.on('tbwinit', function(){
-                    var openPane = function() {
+                    var openPane = function(e) {
                       var selection = t.doc.getSelection(),
-                          focusNode = selection.focusNode,
-                          parentNode = focusNode.parentNode;
+                          range = t.doc.createRange();
 
                       t.$box.find('.' + t.o.prefix + 'contextbar-pane').remove();
 
-                      if (!!selection.rangeCount && !selection.isCollapsed) {
+                      // check if focused node is part of clicked target
+                      if (e.type != 'tbwchange' && !$.contains(e.target, selection.focusNode)) {
+                        // set selection to clicked target
+                        range.selectNodeContents(e.target);
+                        t.doc.getSelection().removeAllRanges();
+                        t.doc.getSelection().addRange(range);
+                        selection = t.doc.getSelection();
+                      }
+
+                      if (selection.focusNode) {
                         buildPane();
-                      } else if (!!selection.rangeCount) {
-                        // go through all supported node types
-                        if (focusNode.nodeName == 'TD' || parentNode.nodeName == 'TD') {
-                          buildPane();
-                        }
                       }
                     };
 
@@ -124,7 +170,10 @@
                     });
 
                     t.$c.on('tbwchange', openPane);
-                    t.$ed.on('click', openPane);
+                    t.$ed.on('click', function(e) {
+                      // timeout is needed to get an correct updated selection
+                      setTimeout(openPane.bind(this, e), 10);
+                    });
                   });
                 }
             }
