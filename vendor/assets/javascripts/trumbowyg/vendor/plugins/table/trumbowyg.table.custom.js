@@ -1,12 +1,9 @@
 /* ===========================================================
- * trumbowyg.table.custom.js v1.2
+ * trumbowyg.table.custom.js v2.0
  * Table plugin for Trumbowyg
  * http://alex-d.github.com/Trumbowyg
  * ===========================================================
- * Author : Lawrence Meckan
- *          Twitter : @absalomedia
- *          Website : absalom.biz
- * Custom Author: Sven Dunemann
+ * Author: Sven Dunemann [dunemann@forelabs.eu]
  */
 
 (function ($) {
@@ -174,102 +171,102 @@
 
                     var addRow = {
                       title: t.lang['tableAddRow'],
-                      text: '<i class="fa fa-plus m-r" /> ' + t.lang['tableAddRow'],
-                      hasIcon: false,
+                      text: t.lang['tableAddRow'],
+                      ico: 'row-below',
 
-                        fn: function () {
-                          t.saveRange();
+                      fn: function () {
+                        t.saveRange();
 
-                          var node = t.doc.getSelection().focusNode;
-                          var table = $(node).closest('table');
+                        var node = t.doc.getSelection().focusNode;
+                        var table = $(node).closest('table');
 
-                          if(table.length > 0) {
-                            var row = $('<tr></tr>');
-                            // add columns according to current columns count
-                            for (var i = 0; i < table.find('tr')[0].childElementCount; i += 1) {
-                              $('<td></td>').appendTo(row);
-                            }
-                            // add row to table
-                            row.appendTo(table);
+                        if(table.length > 0) {
+                          var row = $('<tr></tr>');
+                          // add columns according to current columns count
+                          for (var i = 0; i < table.find('tr')[0].childElementCount; i += 1) {
+                            $('<td></td>').appendTo(row);
                           }
-
-                          return true;
+                          // add row to table
+                          row.appendTo(table);
                         }
+
+                        return true;
+                      }
                     };
 
                     var addColumn = {
                       title: t.lang['tableAddColumn'],
-                      text: '<i class="fa fa-plus m-r" /> ' + t.lang['tableAddColumn'],
-                      hasIcon: false,
+                      text: t.lang['tableAddColumn'],
+                      ico: 'col-right',
 
                       fn: function () {
-                          t.saveRange();
+                        t.saveRange();
 
-                          var node = t.doc.getSelection().focusNode;
-                          var table = $(node).closest('table');
+                        var node = t.doc.getSelection().focusNode;
+                        var table = $(node).closest('table');
 
-                          if(table.length > 0) {
-                            $(table).find('tr').each(function() {
-                              $(this).find('td:last').after('<td></td>');
-                            });
-                          }
+                        if(table.length > 0) {
+                          $(table).find('tr').each(function() {
+                            $(this).find('td:last').after('<td></td>');
+                          });
+                        }
 
-                          return true;
+                        return true;
                       }
                     };
 
                     var destroy = {
                       title: t.lang['tableDestroy'],
-                      text: '<i class="fa fa-times m-r" /> ' + t.lang['tableDestroy'],
-                      hasIcon: false,
+                      text: t.lang['tableDestroy'],
+                      ico: 'table-delete',
 
                       fn: function () {
-                          t.saveRange();
+                        t.saveRange();
 
-                          var node = t.doc.getSelection().focusNode,
-                              table = $(node).closest('table');
+                        var node = t.doc.getSelection().focusNode,
+                            table = $(node).closest('table');
 
-                          table.remove();
+                        table.remove();
 
-                          return true;
+                        return true;
                       }
                     };
 
                     var deleteRow = {
                       title: t.lang['tableDeleteRow'],
-                      text: '<i class="fa fa-minus m-r" /> ' + t.lang['tableDeleteRow'],
-                      hasIcon: false,
+                      text: t.lang['tableDeleteRow'],
+                      ico: 'row-delete',
 
                       fn: function () {
-                          t.saveRange();
+                        t.saveRange();
 
-                          var node = t.doc.getSelection().focusNode,
-                              row = $(node).closest('tr');
+                        var node = t.doc.getSelection().focusNode,
+                            row = $(node).closest('tr');
 
-                          row.remove();
+                        row.remove();
 
-                          return true;
+                        return true;
                       }
                     };
 
                     var deleteColumn = {
                       title: t.lang['tableDeleteColumn'],
-                      text: '<i class="fa fa-minus m-r" /> ' + t.lang['tableDeleteColumn'],
-                      hasIcon: false,
+                      text: t.lang['tableDeleteColumn'],
+                      ico: 'col-delete',
 
                       fn: function () {
-                          t.saveRange();
+                        t.saveRange();
 
-                          var node = t.doc.getSelection().focusNode,
-                              table = $(node).closest('table'),
-                              td = $(node).closest('td'),
-                              cellIndex = td.index();
+                        var node = t.doc.getSelection().focusNode,
+                            table = $(node).closest('table'),
+                            td = $(node).closest('td'),
+                            cellIndex = td.index();
 
-                          $(table).find('tr').each(function() {
-                            $(this).find('td:eq('+cellIndex+')').remove();
-                          });
+                        $(table).find('tr').each(function() {
+                          $(this).find('td:eq('+cellIndex+')').remove();
+                        });
 
-                          return true;
+                        return true;
                       }
                     };
 
