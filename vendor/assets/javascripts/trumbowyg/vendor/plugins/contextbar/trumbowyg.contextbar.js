@@ -24,7 +24,13 @@
         plugins: {
             contextbar: {
                 init: function (t) {
+                  var opts = $.extend(true, {}, t.o.plugins.contextbar || {});
+
                   t.o.plugins.contextbar = $.extend(true, {}, defaultOptions, t.o.plugins.contextbar || {});
+                  // overwrite btns if present in opts
+                  if(opts && opts.btns) {
+                    t.o.plugins.contextbar.btns = $.extend(true, {}, opts.btns);
+                  }
 
                   if (!t.o.plugins.contextbar.enabled) {
                     return;
@@ -50,12 +56,7 @@
 
                     // generate pane
                     if (!selection.isCollapsed && selectedNode.nodeType == Node.TEXT_NODE) {
-                      $.each(t.o.plugins.contextbar.btns.text, function(index, btn) {
-                        // only add create link when no link surrounds current selection
-                        if (btn != "createLink" || $(selectedNode).parents('a').length == 0) {
-                          pane.append(t.buildBtn(btn));
-                        }
-                      });
+                      appendBtnsToPane(pane, t.o.plugins.contextbar.btns.text, selection);
 
                       if (selectedNode == anchorNode) {
                         // correct nodeRect if needed
@@ -77,22 +78,13 @@
                       }
                     } else if (selectedNode.nodeName == 'TD' || parentNode.nodeName == 'TD') {
                       nodeRect = $(selectedNode).closest('table')[0].getBoundingClientRect();
-
-                      $.each(t.o.plugins.contextbar.btns.table, function(index, btn) {
-                        pane.append(t.buildBtn(btn));
-                      });
+                      appendBtnsToPane(pane, t.o.plugins.contextbar.btns.table, selection);
                     } else if (selectedNode.nodeName == 'A' || parentNode.nodeName == 'A') {
                       nodeRect = $(selectedNode).closest('a')[0].getBoundingClientRect();
-
-                      $.each(t.o.plugins.contextbar.btns.a, function(index, btn) {
-                        pane.append(t.buildBtn(btn));
-                      });
+                      appendBtnsToPane(pane, t.o.plugins.contextbar.btns.a, selection);
                     } else if (selectedNode.nodeName == 'IMG' || parentNode.nodeName == 'IMG') {
                       nodeRect = $(selectedNode).closest('img')[0].getBoundingClientRect();
-
-                      $.each(t.o.plugins.contextbar.btns.img, function(index, btn) {
-                        pane.append(t.buildBtn(btn));
-                      });
+                      appendBtnsToPane(pane, t.o.plugins.contextbar.btns.img, selection);
                     } else {
                       return;
                     }
@@ -122,6 +114,17 @@
                     pane.on('click', updateButtonPaneStatus);
                     updateButtonPaneStatus();
                   };
+
+                  var appendBtnsToPane = function(pane, btns, selection) {
+                    $.each(btns, function(index, btn) {
+                      // do not append create link button within an a element
+                      if (btn == "createLink" && $(selection.focusNode).parents('a').length > 0) {
+                        return;
+                      }
+
+                      pane.append(t.buildBtn(btn));
+                    });
+                  }
 
                   var updateButtonPaneStatus = function () {
                     var pane = $("." + t.o.prefix + "contextbar-pane", t.doc),
