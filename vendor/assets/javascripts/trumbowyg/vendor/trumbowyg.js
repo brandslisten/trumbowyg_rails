@@ -711,10 +711,11 @@ jQuery.trumbowyg = {
             openModal: function(e, n) {
                 var i = this,
                     s = i.o.prefix,
-                    top = i.$btnPane.height();
+                    top = i.$btnPane.height(),
+                    selection = i.doc.getSelection();
 
-                if(i.doc.getSelection().focusNode) {
-                  var node = i.doc.getSelection().focusNode;
+                if(!selection.isCollapsed && selection.focusNode) {
+                  var node = selection.focusNode;
                   if(node.nodeType == Node.TEXT_NODE) {
                     node = node.parentNode;
                   }
