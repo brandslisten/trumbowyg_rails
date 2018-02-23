@@ -103,7 +103,7 @@
                     posY = nodeRect.y - edRect.y;
 
                     if (t.o.plugins.contextbar.hideBtnPane) {
-                      posY -= 40;
+                      posY -= (t.$btnPane.height() + 3);
                     } else {
                       posY -= 3;
                     }
