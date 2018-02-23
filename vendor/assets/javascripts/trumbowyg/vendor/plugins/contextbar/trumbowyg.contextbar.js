@@ -76,15 +76,15 @@
                         }
                         textEl.remove();
                       }
-                    } else if (selectedNode.nodeName == 'TD' || parentNode.nodeName == 'TD') {
-                      nodeRect = $(selectedNode).closest('table')[0].getBoundingClientRect();
-                      appendBtnsToPane(pane, t.o.plugins.contextbar.btns.table, selection);
-                    } else if (selectedNode.nodeName == 'A' || parentNode.nodeName == 'A') {
-                      nodeRect = $(selectedNode).closest('a')[0].getBoundingClientRect();
-                      appendBtnsToPane(pane, t.o.plugins.contextbar.btns.a, selection);
                     } else if (selectedNode.nodeName == 'IMG' || parentNode.nodeName == 'IMG') {
                       nodeRect = $(selectedNode).closest('img')[0].getBoundingClientRect();
                       appendBtnsToPane(pane, t.o.plugins.contextbar.btns.img, selection);
+                    } else if (selectedNode.nodeName == 'A' || parentNode.nodeName == 'A') {
+                      nodeRect = $(selectedNode).closest('a')[0].getBoundingClientRect();
+                      appendBtnsToPane(pane, t.o.plugins.contextbar.btns.a, selection);
+                    } else if (selectedNode.nodeName == 'TD' || parentNode.nodeName == 'TD') {
+                      nodeRect = $(selectedNode).closest('table')[0].getBoundingClientRect();
+                      appendBtnsToPane(pane, t.o.plugins.contextbar.btns.table, selection);
                     } else {
                       return;
                     }
