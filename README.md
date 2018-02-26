@@ -38,4 +38,5 @@ In order to sync this repository with the upstream provider use the following wo
         /dist/ui/sass/* => /vendor/assets/stylesheets/trumbowyg/vendor
         /dist/trumbowyg.min.js => /vendor/assets/javascripts/trumbowyg/vendor/trumbowyg.js
         /dist/langs/* => /vendor/assets/javascripts/trumbowyg/vendor/langs/*
-        /dist/plugins/* => /vendor/assets/javascripts/trumbowyg/vendor/plugins/*
+        /dist/plugins/*/*.js => /vendor/assets/javascripts/trumbowyg/vendor/plugins/*/*.js
+        /dist/plugins/*/ui/sass/* => /vendor/assets/stylesheets/trumbowyg/vendor/plugins/*/*
