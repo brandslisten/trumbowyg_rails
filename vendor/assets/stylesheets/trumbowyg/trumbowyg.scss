@@ -100,3 +100,26 @@
     &.trumbowyg-active-button svg { fill: #01846c; }
   }
 }
+
+.trumbowyg-contextbar-side {
+  position: absolute;
+  display: inline-block;
+  left: -40px;
+
+  i {
+    font-size: 24px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #00b393 inset;
+    color: #00b393;
+    line-height: 36px;
+    height: 36px;
+    width: 36px;
+    text-align: center;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0 0 0 2px #01846c inset;
+      color: #01846c;
+    }
+  }
+}
