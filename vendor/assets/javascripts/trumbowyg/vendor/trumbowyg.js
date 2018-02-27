@@ -621,13 +621,22 @@ jQuery.trumbowyg = {
             createLink: function() {
                 for (var e, t, n, o = this, r = o.doc.getSelection(), i = r.focusNode;
                     ["A", "DIV"].indexOf(i.nodeName) < 0;) i = i.parentNode;
+
+                var y = undefined;
+
                 if (i && "A" === i.nodeName) {
                     var s = a(i);
-                    e = s.attr("href"), t = s.attr("title"), n = s.attr("target");
+                    e = s.attr("href"), t = s.attr("title"), n = s.attr("target"), y = s.text();
                     var l = o.doc.createRange();
                     l.selectNode(i), r.removeAllRanges(), r.addRange(l)
                 }
-                o.saveRange(), o.openModalInsert(o.lang.createLink, {
+                o.saveRange();
+
+                if (y === undefined) {
+                  y = (new XMLSerializer).serializeToString(r.getRangeAt(0).cloneContents());
+                }
+
+                o.openModalInsert(o.lang.createLink, {
                     url: {
                         label: "URL",
                         required: !0,
@@ -639,7 +648,7 @@ jQuery.trumbowyg = {
                     },
                     text: {
                         label: o.lang.text,
-                        value: (new XMLSerializer).serializeToString(r.getRangeAt(0).cloneContents())
+                        value: y
                     },
                     target: {
                         label: o.lang.target,
