@@ -68,7 +68,7 @@
                         pnName = selectedNode.parentNode.nodeName.toLowerCase(),
                         handledTypes = $.grep(Object.keys(t.o.plugins.contextbar.btns),function(k){ return (k != 'text' && k!= 'side'); }),
                         typeMapping = t.o.plugins.contextbar.mapping,
-                        nodeIndex = undefined;
+                        nodeIndex = -1;
 
                     // test selected node on handledTypes
                     nodeIndex = $.inArray(snName, handledTypes)
@@ -85,7 +85,7 @@
                       nodeIndex = $.inArray(typeMapping[pnName], handledTypes)
                     }
 
-                    if (nodeIndex !== undefined) {
+                    if (nodeIndex != -1) {
                       return handledTypes[nodeIndex];
                     }
                   };
@@ -206,7 +206,11 @@
                   var appendBtnsToPane = function(pane, btns, selection) {
                     $.each(btns, function(index, btn) {
                       // do not append create link button within an a element
-                      if (btn == "createLink" && $(selection.focusNode).parents('a').length > 0) {
+                      if (btn == "createLink" && $(selection.focusNode).closest('a').length > 0) {
+                        return;
+                      }
+                      // do not append unlink button when not within an a element
+                      if (btn == "unlink" && $(selection.focusNode).closest('a').length == 0) {
                         return;
                       }
 
