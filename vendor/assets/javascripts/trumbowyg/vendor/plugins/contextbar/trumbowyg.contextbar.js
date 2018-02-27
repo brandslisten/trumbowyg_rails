@@ -11,6 +11,8 @@
   var defaultOptions = {
       enabled: false,
       hideBtnPane: false,
+      btnPaneBtns: undefined,
+      centerBtnPane: false,
       sidePane: false,
       btns: {
         side: ['p','blockquote','h2','h3','h4','internalLink','createLink','upload','insertImage','insertImageFromGallery','justifyLeft','justifyCenter','justifyRight','justifyFull','table','unorderedList','orderedList','horizontalRule'],
@@ -280,6 +282,22 @@
 
                     if(t.o.plugins.contextbar.hideBtnPane) {
                       t.$btnPane.hide();
+                    }
+
+                    if(t.o.plugins.contextbar.btnPaneBtns instanceof Array) {
+                      t.$box.addClass(t.o.prefix + 'box-contextbar-modified');
+                      t.$btnPane.html('');
+                      $.each(t.o.plugins.contextbar.btnPaneBtns, function(index, btn) {
+                        var button = t.buildBtn(btn);
+                        if(btn == 'historyUndo' || btn == 'historyRedo') {
+                          button.addClass('trumbowyg-disable');
+                        }
+                        t.$btnPane.append(button);
+                      });
+                    }
+
+                    if(t.o.plugins.contextbar.centerBtnPane) {
+                      t.$btnPane.css('text-align', 'center');
                     }
 
                     t.$ed.on('blur', function(){

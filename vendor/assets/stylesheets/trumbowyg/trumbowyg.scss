@@ -126,3 +126,52 @@
     }
   }
 }
+
+.trumbowyg-box-contextbar-modified {
+  border: none;
+
+  .trumbowyg-button-pane {
+    border-bottom: none;
+    &:after { display: none; }
+
+    button {
+      display: inline-block;
+      position: relative;
+      width: 26px;
+      height: 35px;
+      padding: 1px 6px;
+      margin-bottom: 1px;
+      overflow: hidden;
+      border: none;
+      cursor: pointer;
+      background: none;
+      vertical-align: middle;
+      transition: background-color 150ms, opacity 150ms;
+
+      svg { width: 20px; }
+
+      &:not(.trumbowyg-disable) svg {
+        fill: #00b393;
+        &:hover { fill: #01846c; }
+      }
+
+      &:hover:not(.trumbowyg-disable), &.trumbowyg-active-button:not(.trumbowyg-disable) {
+        display: inline-block;
+        position: relative;
+        width: 26px;
+        height: 35px;
+        padding: 1px 6px;
+        margin-bottom: 1px;
+        overflow: hidden;
+        border: none;
+        cursor: pointer;
+        background: none;
+        vertical-align: middle;
+        transition: background-color 150ms, opacity 150ms;
+        color: #01846c;
+      }
+      &.trumbowyg-active-button:not(.trumbowyg-disable) svg { fill: #01846c; }
+    }
+  }
+
+}
