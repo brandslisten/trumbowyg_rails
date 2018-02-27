@@ -548,7 +548,7 @@ jQuery.trumbowyg = {
                     o = n.doc,
                     r = n.o.prefix,
                     i = a("[data-" + r + "dropdown=" + e + "]", n.$box),
-                    s = a("." + r + e + "-button", n.$btnPane),
+                    s = a("." + r + e + "-button", n.$box).last(),
                     l = i.is(":hidden");
                 if (a("body", o).trigger("mousedown"), l) {
                     var d = s.offset().left;

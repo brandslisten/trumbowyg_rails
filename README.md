@@ -40,3 +40,5 @@ In order to sync this repository with the upstream provider use the following wo
         /dist/langs/* => /vendor/assets/javascripts/trumbowyg/vendor/langs/*
         /dist/plugins/*/*.js => /vendor/assets/javascripts/trumbowyg/vendor/plugins/*/*.js
         /dist/plugins/*/ui/sass/* => /vendor/assets/stylesheets/trumbowyg/vendor/plugins/*/*
+
+**Please be aware that there may be some changes to the trumbowyg.js vendor file (code enhancement). Make sure to backup those changes and merge them back**
