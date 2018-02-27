@@ -1,5 +1,5 @@
 /*/* ===========================================================
- * trumbowyg.contextbar.js v1.0
+ * trumbowyg.contextbar.js v0.3
  * Contextbar plugin for Trumbowyg
  * http://alex-d.github.com/Trumbowyg
  * ===========================================================

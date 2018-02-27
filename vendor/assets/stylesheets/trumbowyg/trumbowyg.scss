@@ -77,6 +77,8 @@
   padding: 0 10px;
   white-space: nowrap;
 
+
+
   button {
     display: inline-block;
     position: relative;
@@ -97,6 +99,7 @@
       &:hover { fill: #01846c; }
     }
 
+    &:hover, &.trumbowyg-active-button { color: #01846c; }
     &.trumbowyg-active-button svg { fill: #01846c; }
   }
 }
