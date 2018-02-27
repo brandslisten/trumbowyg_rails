@@ -13,11 +13,15 @@
       hideBtnPane: false,
       sidePane: false,
       btns: {
+        side: ['p','blockquote','h2','h3','h4','createLink','upload','insertImage','insertImageFromGallery','justifyLeft','justifyCenter','justifyRight','justifyFull','table','unorderedList','orderedList','horizontalRule'],
         text: ['p','blockquote','h2','h3','h4','strong','em','underline','createLink','justifyLeft','justifyCenter','justifyRight','justifyFull','unorderedList','orderedList'],
         table: ['tableAddRow','tableAddColumn','tableDeleteRow','tableDeleteColumn','tableDestroy'],
-        a: ['unlink'],
-        img: ['justifyLeft','justifyCenter','justifyRight'],
-        side: ['p','blockquote','h2','h3','h4','createLink','upload','insertImage','insertImageFromGallery','justifyLeft','justifyCenter','justifyRight','justifyFull','table','unorderedList','orderedList','horizontalRule']
+        a: ['editLink','unlink'],
+        img: ['justifyLeft','justifyCenter','justifyRight']
+      },
+      mapping: {
+        td: 'table',
+        tr: 'table'
       }
   };
 
@@ -38,6 +42,16 @@
                     return;
                   }
 
+                  // add a new btn definition for editLink (synonym for createLink)
+                  var btnDef = {
+                    ico: 'link',
+                    fn: function() {
+                      t.execCmd('createLink');
+                    }
+                  };
+
+                  t.addBtnDef('editLink', btnDef);
+
                   var isNullRect = function(rect) {
                     return rect.x == 0 &&
                     rect.y == 0 &&
@@ -47,6 +61,33 @@
                     rect.bottom == 0 &&
                     rect.height == 0 &&
                     rect.width == 0;
+                  };
+
+                  var detectEditNodeType = function(selectedNode, handledTypes, typeMapping) {
+                    var snName = selectedNode.nodeName.toLowerCase(),
+                        pnName = selectedNode.parentNode.nodeName.toLowerCase(),
+                        handledTypes = $.grep(Object.keys(t.o.plugins.contextbar.btns),function(k){ return (k != 'text' && k!= 'side'); }),
+                        typeMapping = t.o.plugins.contextbar.mapping,
+                        nodeIndex = undefined;
+
+                    // test selected node on handledTypes
+                    nodeIndex = $.inArray(snName, handledTypes)
+                    // test parent node
+                    if (nodeIndex == -1) {
+                      nodeIndex = $.inArray(pnName, handledTypes)
+                    }
+                    // test selected node on type mapping
+                    if (nodeIndex == -1 && $.inArray(snName, Object.keys(typeMapping)) != -1) {
+                      nodeIndex = $.inArray(typeMapping[snName], handledTypes)
+                    }
+                    // test parent node
+                    if (nodeIndex == -1 && $.inArray(pnName, Object.keys(typeMapping)) != -1) {
+                      nodeIndex = $.inArray(typeMapping[pnName], handledTypes)
+                    }
+
+                    if (nodeIndex !== undefined) {
+                      return handledTypes[nodeIndex];
+                    }
                   };
 
                   var buildPane = function(selection) {
@@ -62,6 +103,7 @@
                         pane = $("<div class='" + t.o.prefix + "contextbar-pane'></div>"),
                         side = $("<div class='" + t.o.prefix + "contextbar-side'><i class='fa fa-plus'></i></div>"),
                         edRect = t.$ed[0].getBoundingClientRect(),
+                        editNodeType = undefined,
                         posX,
                         posY;
 
@@ -91,19 +133,12 @@
                         }
                         textEl.remove();
                       }
-                    } else if (selectedNode.nodeName == 'IMG' || parentNode.nodeName == 'IMG') {
-                      nodeRect = $(selectedNode).closest('img')[0].getBoundingClientRect();
-                      appendBtnsToPane(pane, t.o.plugins.contextbar.btns.img, selection);
-                    } else if (selectedNode.nodeName == 'A' || parentNode.nodeName == 'A') {
-                      nodeRect = $(selectedNode).closest('a')[0].getBoundingClientRect();
-                      appendBtnsToPane(pane, t.o.plugins.contextbar.btns.a, selection);
-                    } else if (selectedNode.nodeName == 'TD' || parentNode.nodeName == 'TD') {
-                      nodeRect = $(selectedNode).closest('table')[0].getBoundingClientRect();
-                      appendBtnsToPane(pane, t.o.plugins.contextbar.btns.table, selection);
+                    } else if (editNodeType = detectEditNodeType(selectedNode)) {
+                      nodeRect = $(selectedNode).closest(editNodeType)[0].getBoundingClientRect();
+                      appendBtnsToPane(pane, t.o.plugins.contextbar.btns[editNodeType], selection);
                     } else if (t.o.plugins.contextbar.sidePane) {
                       appendBtnsToPane(pane, t.o.plugins.contextbar.btns.side, selection);
 
-                      // TODO: on new lines position is wrong, also after inserting
                       if (isNullRect(nodeRect)) {
                         nodeRect = selectedNode.getBoundingClientRect();
                       }
@@ -135,6 +170,11 @@
                       return;
                     } else {
                       return;
+                    }
+
+                    // add edit class
+                    if(editNodeType) {
+                      pane.addClass(t.o.prefix + "contextbar-pane-edit");
                     }
 
                     // place context bar on editor box

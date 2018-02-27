@@ -714,13 +714,24 @@ jQuery.trumbowyg = {
                     top = i.$btnPane.height(),
                     selection = i.doc.getSelection();
 
-                if(!selection.isCollapsed && selection.focusNode) {
+                var isInViewport = function(node) {
+                  var elementTop = $(node).offset().top;
+                  var elementBottom = elementTop + $(node).outerHeight();
+                  var viewportTop = $(window).scrollTop();
+                  var viewportBottom = viewportTop + $(window).height();
+                  return elementBottom > viewportTop && elementTop < viewportBottom;
+                };
+
+                if(selection.focusNode) {
                   var node = selection.focusNode;
                   if(node.nodeType == Node.TEXT_NODE) {
                     node = node.parentNode;
                   }
-                  var j = $(node).position();
-                  top = Math.max(i.$btnPane.height(), j.top - i.$ed.position().top);
+
+                  if(isInViewport(node)) {
+                    var j = $(node).position();
+                    top = Math.max(i.$btnPane.height(), j.top - i.$ed.position().top);
+                  }
                 }
 
                 if (a("." + s + "modal-box", i.$box).length > 0) return !1;
