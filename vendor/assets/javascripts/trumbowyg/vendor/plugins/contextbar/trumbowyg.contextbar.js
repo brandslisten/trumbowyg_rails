@@ -17,7 +17,7 @@
         text: ['p','blockquote','h2','h3','h4','strong','em','underline','createLink','justifyLeft','justifyCenter','justifyRight','justifyFull','unorderedList','orderedList'],
         table: ['tableAddRow','tableAddColumn','tableDeleteRow','tableDeleteColumn','tableDestroy'],
         a: ['editLink','unlink'],
-        img: ['justifyLeft','justifyCenter','justifyRight']
+        img: ['editImage','justifyLeft','justifyCenter','justifyRight']
       },
       mapping: {
         td: 'table',
@@ -42,15 +42,26 @@
                     return;
                   }
 
-                  // add a new btn definition for editLink (synonym for createLink)
-                  var btnDef = {
+                  // add new btn definitions for editLink (synonym for createLink) and editImage
+                  var btnDefEditLink = {
+                    title: "Edit link",
                     ico: 'link',
                     fn: function() {
                       t.execCmd('createLink');
                     }
                   };
+                  var btnDefEditImage = {
+                    title: "Edit image",
+                    text: '<i class="fa fa-pencil" />',
+                    hasIcon: false,
+                    fn: function() {
+                      t.saveRange();
+                      t.getDefaultImgDblClickHandler().bind(t.doc.getSelection().focusNode)();
+                    }
+                  };
 
-                  t.addBtnDef('editLink', btnDef);
+                  t.addBtnDef('editLink', btnDefEditLink);
+                  t.addBtnDef('editImage', btnDefEditImage);
 
                   var isNullRect = function(rect) {
                     return rect.x == 0 &&
