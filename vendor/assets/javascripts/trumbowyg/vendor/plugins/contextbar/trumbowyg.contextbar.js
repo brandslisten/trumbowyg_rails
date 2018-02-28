@@ -1,5 +1,5 @@
 /*/* ===========================================================
- * trumbowyg.contextbar.js v0.3
+ * trumbowyg.contextbar.js v0.4
  * Contextbar plugin for Trumbowyg
  * http://alex-d.github.com/Trumbowyg
  * ===========================================================
@@ -224,6 +224,7 @@
 
                     pane.on('click', updateButtonPaneStatus);
                     updateButtonPaneStatus();
+                    t.saveRange();
                   };
 
                   var appendBtnsToPane = function(pane, btns, selection) {
@@ -256,6 +257,33 @@
                         $btn.addClass(activeClasses);
                       }
                     });
+                  };
+
+                  var adjustModalPosition = function() {
+                    var modal = t.$box.find('.' + t.o.prefix + 'modal'),
+                        selection,
+                        node,
+                        top;
+
+                    if(modal.length == 0) {
+                      return;
+                    }
+
+                    t.restoreRange();
+                    selection = t.doc.getSelection();
+
+                    if(selection.focusNode) {
+                      node = selection.focusNode;
+                      if(node.nodeType == Node.TEXT_NODE) {
+                        node = node.parentNode;
+                      }
+
+                      top = Math.max(t.$btnPane.height(), $(node).position().top - t.$ed.position().top);
+                      modal.css('top', top + 'px');
+
+                      // center window to modal
+                      $(window).scrollTop($(modal).offset().top + ($(modal).height() / 2) - ($(window).height() / 2));
+                    }
                   };
 
                   t.$c.on('tbwinit', function(){
@@ -322,6 +350,9 @@
                         setTimeout(openPane.bind(this, e), 10);
                       }
                     });
+
+                    MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+                    new MutationObserver(adjustModalPosition).observe(t.$box[0], {childList: true});
                   });
                 }
             }
