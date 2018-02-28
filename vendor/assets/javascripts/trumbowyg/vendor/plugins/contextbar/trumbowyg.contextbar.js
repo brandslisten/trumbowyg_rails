@@ -16,7 +16,7 @@
       sidePane: false,
       btns: {
         side: ['p','blockquote','h2','h3','h4','internalLink','createLink','upload','insertImage','insertImageFromGallery','justifyLeft','justifyCenter','justifyRight','justifyFull','table','unorderedList','orderedList','horizontalRule'],
-        text: ['p','blockquote','h2','h3','h4','strong','em','underline','createLink','justifyLeft','justifyCenter','justifyRight','justifyFull','unorderedList','orderedList'],
+        text: ['p','blockquote','h2','h3','h4','strong','em','underline','createLink','justifyLeft','justifyCenter','justifyRight','justifyFull','unorderedList','orderedList','preformatted'],
         table: ['tableAddRow','tableAddColumn','tableDeleteRow','tableDeleteColumn','tableDestroy'],
         a: ['editLink','unlink'],
         img: ['editImage','justifyLeft','justifyCenter','justifyRight','deleteImage']
