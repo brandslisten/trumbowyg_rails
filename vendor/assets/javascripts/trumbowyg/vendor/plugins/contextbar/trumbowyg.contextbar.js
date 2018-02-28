@@ -131,7 +131,7 @@
                         posX,
                         posY;
 
-                    if (!selection.rangeCount || selectedNode == t.$ed[0]) {
+                    if (!selection.rangeCount) {
                       return;
                     }
 
@@ -165,6 +165,9 @@
 
                       if (isNullRect(nodeRect)) {
                         nodeRect = selectedNode.getBoundingClientRect();
+                      }
+                      if (selectedNode == t.$ed[0]) {
+                        nodeRect = selectedNode.lastChild.getBoundingClientRect();
                       }
 
                       posY = nodeRect.y - edRect.y + Math.max(nodeRect.height, 25) + 5;
@@ -295,9 +298,10 @@
                       t.$box.find('.' + t.o.prefix + 'contextbar-side').remove();
 
                       // check if focused node is part of clicked target
-                      if (e.type != 'tbwchange' && !$.contains(e.target, selection.focusNode)) {
+                      if (e.type != 'tbwchange' && !$.contains(e.target, selection.focusNode) && selection.focusNode.className != 'trumbowyg-editor') {
                         // set selection to clicked target
                         range.selectNodeContents(e.target);
+
                         t.doc.getSelection().removeAllRanges();
                         t.doc.getSelection().addRange(range);
                         selection = t.doc.getSelection();
