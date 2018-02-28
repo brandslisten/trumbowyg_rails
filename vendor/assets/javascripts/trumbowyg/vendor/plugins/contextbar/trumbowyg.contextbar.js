@@ -167,7 +167,12 @@
                         nodeRect = selectedNode.getBoundingClientRect();
                       }
                       if (selectedNode == t.$ed[0]) {
-                        nodeRect = selectedNode.lastChild.getBoundingClientRect();
+                        if (selectedNode.children.length > 0) {
+                          nodeRect = selectedNode.lastChild.getBoundingClientRect();
+                        } else {
+                          nodeRect = t.$btnPane[0].getBoundingClientRect();
+                          nodeRect.y += t.$btnPane.height() + 5;
+                        }
                       }
 
                       posY = nodeRect.y - edRect.y + Math.max(nodeRect.height, 25) + 5;
