@@ -12,6 +12,17 @@
 
 .trumbowyg-button-pane button.trumbowyg-disable:hover { background-color: transparent; border: none; cursor: not-allowed; }
 
+.trumbowyg-box .trumbowyg-resizer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 16px;
+  cursor: default;
+  font-size: 40px;
+  color: #00b393;
+  transform: rotate(45deg);
+}
+
 .trumbowyg-editor .mceUnderline {
   text-decoration: underline;
 }
