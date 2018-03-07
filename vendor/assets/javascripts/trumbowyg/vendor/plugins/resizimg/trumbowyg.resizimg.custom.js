@@ -47,8 +47,8 @@
                                     $el.css("cursor", "");
                                     $el.attr('height', $el.height());
                                     trumbowyg.$c.trigger('tbwchange');
+                                    trumbowyg.syncCode();
                                     dragging = false;
-                                    placeResizer.bind($el[0])();
                                 }
                             }
                         }
@@ -72,9 +72,9 @@
                     function removeResizer(e) {
                       var resizer = trumbowyg.$box.find(".trumbowyg-resizer");
 
-                      if ($(e.toElement).closest(".trumbowyg-resizer").length == 1) return;
+                      if (e && $(e.toElement).closest(".trumbowyg-resizer").length == 1) return;
 
-                      if(dragging === true || e.currentTarget != resizer[0]) {
+                      if(dragging === true || !e || e.currentTarget != resizer[0]) {
                         trumbowyg.$box.find(".trumbowyg-resizer").remove();
                       }
                     }
@@ -100,6 +100,7 @@
                     }
 
                     function destroyResizable() {
+                        removeResizer();
                         trumbowyg.$ed.find('img.resizable')
                             .resizable('destroy')
                             .off('mousedown', preventDefault);

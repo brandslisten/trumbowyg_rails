@@ -302,6 +302,8 @@
                       t.$box.find('.' + t.o.prefix + 'contextbar-pane').remove();
                       t.$box.find('.' + t.o.prefix + 'contextbar-side').remove();
 
+                      if (!selection.focusNode) return;
+
                       // check if focused node is part of clicked target
                       if (e.type != 'tbwchange' && !$.contains(e.target, selection.focusNode) && selection.focusNode.className != 'trumbowyg-editor') {
                         // set selection to clicked target
