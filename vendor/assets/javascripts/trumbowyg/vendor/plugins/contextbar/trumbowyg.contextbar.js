@@ -15,11 +15,11 @@
       centerBtnPane: false,
       sidePane: false,
       btns: {
-        side: ['p','blockquote','h2','h3','h4','internalLink','createLink','upload','insertImage','insertImageFromGallery','justifyLeft','justifyCenter','justifyRight','justifyFull','table','unorderedList','orderedList','horizontalRule'],
-        text: ['p','blockquote','h2','h3','h4','strong','em','underline','createLink','justifyLeft','justifyCenter','justifyRight','justifyFull','unorderedList','orderedList','preformatted'],
+        side: ['p','blockquote','h2','h3','h4','internalLink','createLink','upload','insertImage','insertImageFromGallery','justifyLeft','justifyCenter','justifyRight','justifyFull','table','unorderedList','orderedList','outdent','indent','horizontalRule'],
+        text: ['p','blockquote','h2','h3','h4','strong','em','underline','createLink','justifyLeft','justifyCenter','justifyRight','justifyFull','unorderedList','orderedList','outdent','indent','preformatted'],
         table: ['tableAddRow','tableAddColumn','tableDeleteRow','tableDeleteColumn','tableDestroy'],
         a: ['editLink','unlink'],
-        img: ['editImage','justifyLeft','justifyCenter','justifyRight','deleteImage']
+        img: ['editImage','floatleft','floatright','justifyLeft','justifyCenter','justifyRight','deleteImage']
       },
       mapping: {
         td: 'table',
@@ -237,6 +237,7 @@
 
                   var appendBtnsToPane = function(pane, btns, selection) {
                     $.each(btns, function(index, btn) {
+                      var button;
                       // do not append create link button within an a element
                       if (btn == "createLink" && $(selection.focusNode).closest('a').length > 0) {
                         return;
@@ -245,8 +246,9 @@
                       if (btn == "unlink" && $(selection.focusNode).closest('a').length == 0) {
                         return;
                       }
-
-                      pane.append(t.buildBtn(btn));
+                      try {
+                        pane.append(t.buildBtn(btn));
+                      } catch (e) {}
                     });
                   }
 
