@@ -44,6 +44,7 @@
                                 var query = {
                                     url: pastedData.trim()
                                 };
+                                var newEl = undefined;
                                 var content = "";
                                 var index = 0;
 
@@ -74,14 +75,41 @@
                                             $.ajax(this);
                                         }
                                         if (index == endpoints.length - 1) {
-                                            content = $("<a>", {
+                                            newEl = $("<a>", {
                                                 href: pastedData,
                                                 text: pastedData
-                                            }).prop('outerHTML');
+                                            });
+                                            content = newEl.prop('outerHTML');
                                         }
                                         if (content.length > 0) {
                                             index = 0;
-                                            trumbowyg.execCmd("insertHTML", content);
+
+                                            var node = trumbowyg.doc.getSelection().focusNode,
+                                                range = trumbowyg.doc.createRange();
+
+                                            if (trumbowyg.$ed.html() == "") {
+                                              // if there is no content in editor, create an empty span element
+                                              trumbowyg.$ed[0].appendChild(newEl[0]);
+                                            } else {
+                                              // insert emoji behind last focused node
+                                              range.setStartAfter(node);
+                                              range.setEndAfter(node);
+                                              trumbowyg.doc.getSelection().removeAllRanges();
+                                              trumbowyg.doc.getSelection().addRange(range);
+
+                                              trumbowyg.range.insertNode(newEl[0]);
+                                            }
+
+                                            // now set cursor right after emoji
+                                            range = trumbowyg.doc.createRange()
+                                            range.setStartAfter(newEl[0]);
+                                            range.setEndAfter(newEl[0]);
+                                            trumbowyg.doc.getSelection().removeAllRanges();
+                                            trumbowyg.doc.getSelection().addRange(range);
+
+                                            // save range
+                                            trumbowyg.saveRange();
+                                            trumbowyg.syncCode();
                                         }
                                     }
                                 });

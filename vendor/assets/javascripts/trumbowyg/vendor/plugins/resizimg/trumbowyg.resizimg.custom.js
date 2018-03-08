@@ -35,17 +35,17 @@
                                 },
                                 onDrag: function (ev, $el, newWidth, newHeight) {
                                     var opt = trumbowyg.o.plugins.resizimg;
-                                    if (newHeight < opt.minSize) {
-                                        newHeight = opt.minSize;
+                                    if (newWidth < opt.minSize) {
+                                        newWidth = opt.minSize;
                                     }
-                                    newHeight -= newHeight % opt.step;
-                                    $el.height(newHeight);
+                                    newWidth -= newWidth % opt.step;
+                                    $el.width(newWidth);
                                     placeResizer.bind($el[0])();
                                     return false;
                                 },
                                 onDragEnd: function (ev, $el) {
                                     $el.css("cursor", "");
-                                    $el.attr('height', $el.height());
+                                    $el.attr('width', $el.width());
                                     trumbowyg.$c.trigger('tbwchange');
                                     trumbowyg.syncCode();
                                     dragging = false;
@@ -81,7 +81,7 @@
 
                     function initResizable() {
                         trumbowyg.$ed.find('img:not(.resizable)')
-                            .height(function(){ return $(this).attr('height') || $(this).height(); })
+                            .width(function(){ return $(this).attr('width') || $(this).width(); })
                             .resizable(trumbowyg.o.plugins.resizimg.resizable)
                             .on('mousedown', preventDefault)
                             .on('mouseover', placeResizer)
