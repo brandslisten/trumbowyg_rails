@@ -53,14 +53,14 @@
 
           t.addBtnDef('floatleft', {
             title: t.lang.floating['left'],
-            text: '<i class="fa fa-arrow-left" />',
+            text: '<i class="fa fa-window-maximize fa-rotate-90" />',
             hasIcon: false,
             fn: left
           });
 
           t.addBtnDef('floatright', {
             title: t.lang.floating['right'],
-            text: '<i class="fa fa-arrow-right" />',
+            text: '<i class="fa fa-window-maximize fa-rotate-270" />',
             hasIcon: false,
             fn: right
           });
