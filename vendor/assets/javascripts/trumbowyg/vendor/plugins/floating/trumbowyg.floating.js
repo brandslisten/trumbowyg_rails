@@ -9,8 +9,8 @@
     langs: {
         de: {
             floating: {
-              left: 'linksbündig floaten',
-              right: 'rechtsbündig floaten'
+              left: 'Umlauf links',
+              right: 'Umlauf rechts'
             }
         },
         en: {
