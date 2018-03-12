@@ -58,8 +58,6 @@
                 init: function (t) {
                     t.o.plugins.simplemarkdown = $.extend(true, {}, defaultOptions, t.o.plugins.simplemarkdown || {});
 
-                    if (!t.o.plugins.simplemarkdown.enabled) return;
-
                     var translations = [t.lang.simplemarkdown.disabled, t.lang.simplemarkdown.enabled];
 
                     var analyze = function(e) {
@@ -75,6 +73,9 @@
                           cmd,
                           param,
                           newValue;
+
+                      // return when not enabled
+                      if (!t.o.plugins.simplemarkdown.enabled) return;
 
                       // Only analyze when
                       // keyCode matched triggerKeyCode and
@@ -122,12 +123,25 @@
                       t.doc.getSelection().addRange(range);
                     }
 
+                    var btnTitle = function() {
+                      return translations[+t.o.plugins.simplemarkdown.enabled];
+                    };
+
+                    var btnText = function() {
+                      var cls = '';
+                      if (t.o.plugins.simplemarkdown.enabled) cls = ' text-success';
+                      return '<i class="fa fa-caret-square-o-down' + cls + '" />';
+                    };
+
                     var btnDef = {
                         title: translations[+t.o.plugins.simplemarkdown.enabled],
-                        text: '<i class="fa fa-caret-square-o-down" />',
+                        text: btnText(),
                         hasIcon: false,
-                        fn: function () {
-                          t.o.plugins.simplemarkdown.enabled == !t.o.plugins.simplemarkdown.enabled;
+                        fn: function (btn) {
+                          t.o.plugins.simplemarkdown.enabled = !t.o.plugins.simplemarkdown.enabled;
+                          t.$btnPane.find("." + t.o.prefix + btn + "-button").
+                            attr("title", btnTitle()).
+                            html(btnText());
                         }
                     };
 
