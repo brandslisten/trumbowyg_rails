@@ -1,3 +1,11 @@
+/*/* ===========================================================
+ * trumbowyg.floating.js v1.0
+ * Floating plugin for Trumbowyg
+ * http://alex-d.github.com/Trumbowyg
+ * ===========================================================
+ * Author : Sven Dunemann
+ */
+
 (function ($) {
   var defaultOptions = {
       margin: 18
