@@ -10,6 +10,7 @@
 
     var defaultOptions = {
         enabled: true,
+        dropdown: true,
         triggerKeyCode: 32,
         rules: {
           '#': ['formatBlock','h2'],
@@ -24,7 +25,7 @@
           '.l': 'justifyLeft',
           '.c': 'justifyCenter',
           '.r': 'justifyRight',
-          '.f': 'justifyFull',
+          '.b': 'justifyFull',
           '>>': 'indent',
           '<<': 'outdent',
           '*': 'insertUnorderedList',
@@ -32,8 +33,7 @@
           '-': 'insertUnorderedList',
           '1.': 'insertOrderedList',
           '___': 'insertHorizontalRule',
-          '---': 'insertHorizontalRule',
-          '`': ['formatBlock','code']
+          '---': 'insertHorizontalRule'
         }
     };
 
@@ -43,13 +43,59 @@
             en: {
                 simplemarkdown: {
                   enabled: 'Markdown enabled',
-                  disabled: 'Markdown disabled'
+                  disabled: 'Markdown disabled',
+                  rules: {
+                    '#': 'Headline 2',
+                    '.h2': 'Headline 2',
+                    '##': 'Headline 3',
+                    '.h3': 'Headline 3',
+                    '###': 'Headline 4',
+                    '.h4': 'Headline 4',
+                    '>': 'Quote',
+                    '.q': 'Quote',
+                    '.p': 'Paragraph',
+                    '.l': 'left aligned',
+                    '.r': 'right aligned',
+                    '.c': 'center aligned',
+                    '.b': 'block aligned',
+                    '>>': 'Indent',
+                    '>>': 'Outdent',
+                    '*': 'Unordered list',
+                    '+': 'Unordered list',
+                    '-': 'Unordered list',
+                    '1.': 'Ordered list',
+                    '___': 'Horizontale line',
+                    '---': 'Horizontale line'
+                  }
                 }
             },
             de: {
               simplemarkdown: {
                 enabled: 'Markdown aktiv',
-                disabled: 'Markdown inaktiv'
+                disabled: 'Markdown inaktiv',
+                rules: {
+                  '#': 'H2 Überschrift',
+                  '.h2': 'H2 Überschrift',
+                  '##': 'H3 Überschrift',
+                  '.h3': 'H3 Überschrift',
+                  '###': 'H4 Überschrift',
+                  '.h4': 'H4 Überschrift',
+                  '>': 'Zitat',
+                  '.q': 'Zitat',
+                  '.p': 'Absatz',
+                  '.l': 'Linksbündig',
+                  '.r': 'Rechtsbündig',
+                  '.c': 'Zentriert',
+                  '.b': 'Blocktext',
+                  '>>': 'Einrücken vergrößern',
+                  '<<': 'Einrücken verkleinern',
+                  '*': 'Ungeordnete Liste',
+                  '+': 'Ungeordnete Liste',
+                  '-': 'Ungeordnete Liste',
+                  '1.': 'Geordnete Liste',
+                  '___': 'Horizontale Linie',
+                  '---': 'Horizontale Linie'
+                }
               }
             },
         },
@@ -106,9 +152,14 @@
                       t.execCmd(cmd, param);
 
                       // remove selector from node
-                      selectedNode = t.doc.getSelection().focusNode;
+                      // make selector regexp safe
+                      selector = selector.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+                      if(t.doc.getSelection().focusNode != t.$ed[0]) selectedNode = t.doc.getSelection().focusNode;
                       newValue = selectedNode.wholeText.replace(new RegExp(selector + character), '');
-                      if (newValue.length == 0) {
+                      if (newValue.length == 0 &&
+                          t.doc.getSelection().focusNode != t.$ed[0] &&
+                          $.inArray(cmd, ['insertUnorderedList','insertOrderedList']) == -1
+                      ) {
                         var emptyNode = t.doc.createElement("BR");
                         selectedNode.replaceWith(emptyNode);
                         selectedNode = emptyNode;
@@ -148,6 +199,37 @@
                     t.addBtnDef('simplemarkdown', btnDef);
                     t.$c.on('tbwinit', function(){
                       t.$ed.on('keyup', analyze);
+
+                      if (t.o.plugins.simplemarkdown.dropdown) {
+                        t.$btnPane.find("." + t.o.prefix + "simplemarkdown-button").hover(function(){
+                          var btnName = 'simplemarkdown';
+
+                          var dropdownPrefix = t.o.prefix + 'dropdown',
+                              dropdownOptions = { // the dropdown
+                              class: dropdownPrefix + '-' + btnName + ' ' + dropdownPrefix + ' ' + t.o.prefix + 'fixed-top'
+                          };
+                          dropdownOptions['data-' + dropdownPrefix] = btnName;
+                          var $dropdown = $('<div/>', dropdownOptions);
+
+                          if ($("." + dropdownPrefix + "-" + btnName).length == 0) {
+                            t.$box.append($dropdown.hide());
+                          } else {
+                            $dropdown = t.$box.find("." + dropdownPrefix + "-" + btnName);
+                          }
+
+                          // clear dropdown
+                          $dropdown.html('');
+
+                          // list all rules
+                          var table = $('<table></table>');
+                          $(Object.keys(t.o.plugins.simplemarkdown.rules)).each(function(index, key){
+                            table.append($("<tr><td>" + key + "</td><td>" + t.lang.simplemarkdown.rules[key] + "</td></tr>"));
+                          });
+
+                          $dropdown.append(table);
+                          t.dropdown(btnName);
+                        });
+                      }
                     });
                 }
             }
