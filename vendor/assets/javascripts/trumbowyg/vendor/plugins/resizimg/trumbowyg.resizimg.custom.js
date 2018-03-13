@@ -81,8 +81,11 @@
                       }
                     }
 
-                    function initResizable() {
-                        trumbowyg.$ed.find('img:not(.resizable)')
+                    function initResizable(force) {
+                        var selector = 'img:not(.resizable)';
+                        if (force) selector = 'img';
+
+                        trumbowyg.$ed.find(selector)
                           .width(function(){
                             var width = parseInt($(this).attr('width')) || $(this).width();
                             $(this).css({ "min-width": width });
@@ -113,7 +116,7 @@
                         trumbowyg.syncTextarea();
                     }
 
-                    trumbowyg.$c.on('tbwinit', initResizable);
+                    trumbowyg.$c.on('tbwinit', initResizable.bind(this, true));
                     trumbowyg.$c.on('tbwfocus', initResizable);
                     trumbowyg.$c.on('tbwchange', function() {
                       setTimeout(initResizable, 50);
