@@ -36,12 +36,14 @@
                                     }
                                     newWidth -= newWidth % opt.step;
                                     $el.width(newWidth);
+                                    $el.css('min-width', newWidth);
                                     placeResizer.bind($el[0])();
                                     return false;
                                 },
                                 onDragEnd: function (ev, $el) {
                                     $el.css("cursor", "");
                                     $el.attr('width', $el.width());
+                                    $el.attr('min-width', $el.width());
                                     trumbowyg.$c.trigger('tbwchange');
                                     trumbowyg.syncCode();
                                     dragging = false;
@@ -81,22 +83,26 @@
 
                     function initResizable() {
                         trumbowyg.$ed.find('img:not(.resizable)')
-                            .width(function(){ return $(this).attr('width') || $(this).width(); })
-                            .resizable(trumbowyg.o.plugins.resizimg.resizable)
-                            .on('mousedown', preventDefault)
-                            .on('mouseover', placeResizer)
-                            .on('mouseout', removeResizer)
-                            .on('mousemove', function(ev) {
-                              var $el = $(this),
-                                  x = ev.pageX - $el.offset().left,
-                                  y = ev.pageY - $el.offset().top;
+                          .width(function(){
+                            var width = parseInt($(this).attr('width')) || $(this).width();
+                            $(this).css({ "min-width": width });
+                            return width;
+                          })
+                          .resizable(trumbowyg.o.plugins.resizimg.resizable)
+                          .on('mousedown', preventDefault)
+                          .on('mouseover', placeResizer)
+                          .on('mouseout', removeResizer)
+                          .on('mousemove', function(ev) {
+                            var $el = $(this),
+                                x = ev.pageX - $el.offset().left,
+                                y = ev.pageY - $el.offset().top;
 
-                              if(x > ($el.width() - 30) && y > ($el.height() - 30)) {
-                                $el.css("cursor", "nwse-resize");
-                              } else {
-                                $el.css("cursor", "");
-                              }
-                            });
+                            if(x > ($el.width() - 30) && y > ($el.height() - 30)) {
+                              $el.css("cursor", "nwse-resize");
+                            } else {
+                              $el.css("cursor", "");
+                            }
+                          });
                     }
 
                     function destroyResizable() {

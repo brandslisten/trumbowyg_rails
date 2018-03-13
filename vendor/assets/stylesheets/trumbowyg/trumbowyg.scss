@@ -191,3 +191,16 @@
   table { margin: 12px; }
   td:first-of-type { font-weight: bold; padding-right: 8px; }
 }
+
+.trumbowyg-editor .ogPreviewContainer {
+  display: inline-block;
+  border: 1px solid #ccc;
+  max-width: min-content;
+
+  img { min-width: 480px; }
+
+  a, p {
+    padding: 8px;
+    display: block;
+  }
+}
