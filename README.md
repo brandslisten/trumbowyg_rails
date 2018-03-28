@@ -42,3 +42,19 @@ In order to sync this repository with the upstream provider use the following wo
         /dist/plugins/*/ui/sass/* => /vendor/assets/stylesheets/trumbowyg/vendor/plugins/*/*
 
 **Please be aware that there may be some changes to the trumbowyg.js vendor file (code enhancement). Make sure to backup those changes and merge them back**
+
+Custom Plugins
+==============
+
+- cleanpaste.custom
+- contextbar
+- externallink
+- floating
+- internallink
+- indentation
+- insertimagefromgallery
+- insertemoji
+- pasteog
+- resizimg.custom
+- simplemarkdown
+- upload.overwrite
