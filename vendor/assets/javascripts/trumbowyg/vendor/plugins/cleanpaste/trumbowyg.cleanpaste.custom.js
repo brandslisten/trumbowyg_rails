@@ -98,44 +98,55 @@
         plugins: {
             cleanPaste: {
                 init: function (t) {
+                    var insertNode = function(node, newNode) {
+                      var range = t.doc.createRange();
+
+                      if (t.$ed.html() == "") {
+                        // simply append if there is no content in editor
+                        t.$ed[0].appendChild(newNode);
+                      } else {
+                        // insert pasted content behind last focused node
+                        range.setStartAfter(node);
+                        range.setEndAfter(node);
+                        t.doc.getSelection().removeAllRanges();
+                        t.doc.getSelection().addRange(range);
+
+                        t.range.insertNode(newNode);
+                      }
+
+                      // now set cursor right after pasted content
+                      range = t.doc.createRange()
+                      range.setStartAfter(newNode);
+                      range.setEndAfter(newNode);
+                      t.doc.getSelection().removeAllRanges();
+                      t.doc.getSelection().addRange(range);
+
+                      // save new node as focused node
+                      t.saveRange();
+                      t.syncCode();
+                    };
+
                     t.pasteHandlers.push(function (pasteEvent) {
                         try {
                           t.saveRange();
 
                           var clipboardData = (pasteEvent.originalEvent || pasteEvent).clipboardData,
-                              pastedData = clipboardData.getData("Text"),
-                              node = t.doc.getSelection().focusNode,
-                              range = t.doc.createRange(),
-                              cleanedPaste = cleanIt(pastedData.trim()),
-                              newNode = $(cleanedPaste)[0] || t.doc.createTextNode(cleanedPaste);
+                              node = t.doc.getSelection().focusNode;
 
-                          if (t.$ed.html() == "") {
-                            // simply append if there is no content in editor
-                            t.$ed[0].appendChild(newNode);
-                          } else {
-                            // insert pasted content behind last focused node
-                            range.setStartAfter(node);
-                            range.setEndAfter(node);
-                            t.doc.getSelection().removeAllRanges();
-                            t.doc.getSelection().addRange(range);
+                          // go through all items
+                          $.each(clipboardData.items, function(i, item){
+                            if (item.kind != 'string' || item.type != 'text/plain') return;
+                            item.getAsString(function(s){
+                              var cleanedPaste = cleanIt($("<p>"+s+"</p>").html()),
+                                  newNode = t.doc.createTextNode(cleanedPaste);
 
-                            t.range.insertNode(newNode);
-                          }
-
-                          // now set cursor right after pasted content
-                          range = t.doc.createRange()
-                          range.setStartAfter(newNode);
-                          range.setEndAfter(newNode);
-                          t.doc.getSelection().removeAllRanges();
-                          t.doc.getSelection().addRange(range);
+                              insertNode(node, newNode);
+                            });
+                          });
 
                           // prevent defaults
                           pasteEvent.stopPropagation();
                           pasteEvent.preventDefault();
-
-                          // save new node as focused node
-                          t.saveRange();
-                          t.syncCode();
                         } catch (c) {
                         }
                     });
