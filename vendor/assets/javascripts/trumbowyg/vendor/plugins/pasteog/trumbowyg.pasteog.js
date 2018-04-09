@@ -12,7 +12,7 @@
     var defaultOptions = {
       enabled: true,
       endpoint: "https://opengrapher.brandslisten.com/?url=%{url}",
-      html: '<div class="ogPreviewContainer"><img src="%{image}" alt="%{title}" width="480"></img><a href="%{url}" target="_blank" title="%{title}">%{title}</a><p>%{description}</p></div>',
+      html: '<a href="%{url}" target="_blank" title="%{title}"rel="nofollow" class="ogPreviewLink"><div style="background-image: url(\'%{image}\')" alt="%{title}" class="ogPreviewLink--image" ></div><p class="ogPreviewLink--title">%{    title}</p><div class="ogPreviewLink--description">%{description}</div></a><p></p>',
       fn: undefined // Has to return a new Node
     };
 
