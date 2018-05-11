@@ -346,7 +346,7 @@
                       // timeout is needed to avoid removing side pane
                       setTimeout(function() {
                         t.$box.find('.' + t.o.prefix + 'contextbar-side').remove();
-                      }, 100);
+                      }, 500);
                     });
 
                     t.$c.on('tbwchange', openPane);
