@@ -12,7 +12,7 @@
     var defaultOptions = {
       enabled: true,
       endpoint: "https://opengrapher.brandslisten.com/?url=%{url}",
-      html: '<div class="ogPreviewContainer"><img src="%{image}" alt="%{title}" width="480"></img><a href="%{url}" target="_blank" title="%{title}">%{title}</a><p>%{description}</p></div>',
+      html: '<div class="ogPreviewLink"><a href="%{url}" target="_blank" title="%{title}"rel="nofollow" style="background-image: url(\'%{image}\')" alt="%{title}" class="ogPreviewLink--image" >&nbsp;</a><a href="%{url}" target="_blank" title="%{title}"rel="nofollow"  class="ogPreviewLink--title">%{title}</a><a href="%{url}" target="_blank" title="%{title}"rel="nofollow" class="ogPreviewLink--description">%{description}</a><close/></div><p> <br/> </p>',
       fn: undefined // Has to return a new Node
     };
 
@@ -25,6 +25,15 @@
                     if (!t.o.plugins.pasteOG.enabled) {
                       return;
                     }
+                    t.$c.on('tbwinit', function() {
+                      t.$ed.on('click', '.ogPreviewLink close', function(e) {
+                        let $element = $(e.currentTarget).parent();
+                        let url = $element.find('a[href]')[0].href;
+                        $element.replaceWith(url);
+                        t.syncCode();
+                        t.$c.trigger('tbwchange');
+                      });
+                    });
 
                     var callbackFn = t.o.plugins.pasteOG.fn || function(res, url){
                       var node = undefined;
@@ -57,7 +66,7 @@
                       return node;
                     };
 
-                    t.pasteHandlers.push(function(pasteEvent) {
+                    t.pasteHandlers.splice(0,0,function(pasteEvent) {
                         try {
                           var clipboardData = (pasteEvent.originalEvent || pasteEvent).clipboardData,
                               pastedData = clipboardData.getData("Text");
