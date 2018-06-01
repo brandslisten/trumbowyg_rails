@@ -27,8 +27,8 @@
                     }
                     t.$c.on('tbwinit', function() {
                       t.$ed.on('click', '.ogPreviewLink close', function(e) {
-                        let $element = $(e.currentTarget).parent();
-                        let url = $element.find('a[href]')[0].href;
+                        var $element = $(e.currentTarget).parent();
+                        var url = $element.find('a[href]')[0].href;
                         $element.replaceWith(url);
                         t.syncCode();
                         t.$c.trigger('tbwchange');
