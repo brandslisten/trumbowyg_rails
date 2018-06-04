@@ -227,9 +227,9 @@
       box-shadow: 0 0 0 1px lightgray;
       border-radius: 50%;
       transition: transform 150ms ease-in-out;
+      cursor: pointer;
       &:hover{
         transform: scale(1.1);
-        curser: pointer;
       }
     }
   }
