@@ -78,7 +78,7 @@
                             var url = pastedData.trim(),
                                 newNode = undefined;
 
-                            $.getJSON(t.o.plugins.pasteOG.endpoint.replace("%{url}", encodeURI(url)), function(data){
+                            $.getJSON(t.o.plugins.pasteOG.endpoint.replace("%{url}", encodeURIComponent(url)), function(data){
                               var newNode = callbackFn(data, url),
                                   node = t.doc.getSelection().focusNode,
                                   range = t.doc.createRange();
