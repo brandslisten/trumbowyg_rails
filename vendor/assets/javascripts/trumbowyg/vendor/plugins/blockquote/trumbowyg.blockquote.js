@@ -1,12 +1,19 @@
 (function($) {
   'use strict';
 
-  function buildButtonDef(trumbowyg) {
+  function blockquoteContainer(t) {
+    return (
+      t.range.commonAncestorContainer.parentElement.closest('blockquote') ||
+      t.range.commonAncestorContainer.nodeName.toLowerCase() === 'blockquote'
+    );
+  }
+
+  function buildButtonDef(t) {
     return {
       fn: function() {
-        var parentQuote = trumbowyg.range.commonAncestorContainer.parentElement.closest('blockquote');
-        if (parentQuote) return;
-        trumbowyg.execCmd('formatBlock', 'blockquote');
+        !blockquoteContainer(t)
+          ? t.execCmd('formatBlock', 'blockquote')
+          : console.log('blockquote detected!');
       }
     };
   }
@@ -14,8 +21,8 @@
   $.extend(true, $.trumbowyg, {
     plugins: {
       blockquote: {
-        init: function(trumbowyg) {
-          trumbowyg.addBtnDef('blockquote', buildButtonDef(trumbowyg));
+        init: function(t) {
+          t.addBtnDef('blockquote', buildButtonDef(t));
         }
       }
     }
