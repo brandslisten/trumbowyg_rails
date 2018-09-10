@@ -1,3 +1,10 @@
+/* ===========================================================
+ * trumbowyg.blockquote.js v0.1
+ * Custom blockquote plugin for Brandslisten Trumbowyg Editor
+ * https://github.com/brandslisten/trumbowyg_rails
+ * ===========================================================
+ */
+
 (function($) {
   'use strict';
 
