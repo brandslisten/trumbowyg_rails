@@ -1,19 +1,24 @@
 (function($) {
   'use strict';
 
-  function blockquoteContainer(t) {
-    return (
-      t.range.commonAncestorContainer.parentElement.closest('blockquote') ||
-      t.range.commonAncestorContainer.nodeName.toLowerCase() === 'blockquote'
-    );
+  function isBlockquote(t) {
+    return t.range.startContainer.parentElement.closest('blockquote');
   }
 
-  function buildButtonDef(t) {
+  function wrapBlockquote(t) {
+    t.execCmd('formatBlock', 'blockquote');
+  }
+
+  function unwrapBlockquote(t) {
+    $(isBlockquote(t))
+      .contents()
+      .unwrap('blockquote');
+  }
+
+  function blockquoteButton(t) {
     return {
       fn: function() {
-        !blockquoteContainer(t)
-          ? t.execCmd('formatBlock', 'blockquote')
-          : console.log('blockquote detected!');
+        isBlockquote(t) ? unwrapBlockquote(t) : wrapBlockquote(t);
       }
     };
   }
@@ -22,7 +27,7 @@
     plugins: {
       blockquote: {
         init: function(t) {
-          t.addBtnDef('blockquote', buildButtonDef(t));
+          t.addBtnDef('blockquote', blockquoteButton(t));
         }
       }
     }
