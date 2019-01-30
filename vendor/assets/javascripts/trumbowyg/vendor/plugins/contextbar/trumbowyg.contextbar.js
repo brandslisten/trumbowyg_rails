@@ -141,7 +141,7 @@
 
                       if (selectedNode == anchorNode) {
                         // correct nodeRect if needed
-                        var textEl = $("<span style='font-size:1em; display:none;'>"+selectedText+"</span>"),
+                        var textEl = $("<span style='font-size:1em; display:none;'/>").text(selectedText),
                             delta = 10,
                             range = t.doc.createRange();
 
