@@ -28,8 +28,7 @@
                     t.o.plugins.internalLink = $.extend(true, {}, defaultOptions, t.o.plugins.internalLink || {});
                     var btnDef = {
                         title: t.lang['internalLink'],
-                        text: '<i class="fa fa-exchange" />',
-                        hasIcon: false,
+                        ico: 'internal-link',
                         fn: function () {
                           t.saveRange();
                           new bl_app.internalLinkTool(t.range, t.o.plugins.internalLink.serverPath);
