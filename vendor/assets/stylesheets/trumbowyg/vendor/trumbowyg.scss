@@ -52,6 +52,7 @@ $slow-transition-duration: 300ms !default;
     width: 100%;
     min-height: 300px;
     margin: 17px auto;
+    z-index: 0;
 }
 
 .trumbowyg-box .trumbowyg-editor {
