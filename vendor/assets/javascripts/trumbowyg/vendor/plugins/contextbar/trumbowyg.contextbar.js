@@ -89,7 +89,7 @@
                   };
 
                   var getSaveBoundingClientRect = function(node) {
-                    if (node["getBoundingClientRect"]) {
+                    if (node.getBoundingClientRect) {
                       return node.getBoundingClientRect();
                     } else if (node.parentNode) {
                       return getSaveBoundingClientRect(node.parentNode);
