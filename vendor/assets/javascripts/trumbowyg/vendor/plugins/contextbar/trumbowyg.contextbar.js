@@ -50,6 +50,7 @@
                     ico: 'link',
                     fn: function() {
                       t.execCmd('createLink');
+                      return false;
                     }
                   };
                   var btnDefEditImage = {
@@ -86,6 +87,14 @@
                     rect.height == 0 &&
                     rect.width == 0;
                   };
+
+                  var getSaveBoundingClientRect = function(node) {
+                    if (node["getBoundingClientRect"]) {
+                      return node.getBoundingClientRect();
+                    } else {
+                      return getSaveBoundingClientRect(node.parentNode);
+                    };
+                  }
 
                   var detectEditNodeType = function(selectedNode, handledTypes, typeMapping) {
                     var snName = selectedNode.nodeName.toLowerCase(),
@@ -164,11 +173,11 @@
                       appendBtnsToPane(pane, t.o.plugins.contextbar.btns.side, selection);
 
                       if (isNullRect(nodeRect)) {
-                        nodeRect = selectedNode.getBoundingClientRect();
+                        nodeRect = getSaveBoundingClientRect(selectedNode);
                       }
                       if (selectedNode == t.$ed[0]) {
                         if (selectedNode.children.length > 0) {
-                          nodeRect = selectedNode.lastChild.getBoundingClientRect();
+                          nodeRect = getSaveBoundingClientRect(selectedNode.lastChild)
                         } else {
                           nodeRect = t.$btnPane[0].getBoundingClientRect();
                           nodeRect.y += t.$btnPane.height() + 5;
