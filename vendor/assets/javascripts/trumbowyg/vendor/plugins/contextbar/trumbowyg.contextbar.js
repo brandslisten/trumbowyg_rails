@@ -94,7 +94,7 @@
                     } else if (node.parentNode) {
                       return getSaveBoundingClientRect(node.parentNode);
                     } else {
-                      return ;
+                      return;
                     };
                   }
 
@@ -186,7 +186,7 @@
                         }
                       }
 
-                      if (!nodeRect) {return};
+                      if (!nodeRect) { return };
 
                       posY = nodeRect.y - edRect.y + Math.max(nodeRect.height, 25) + 5;
 
