@@ -91,8 +91,10 @@
                   var getSaveBoundingClientRect = function(node) {
                     if (node["getBoundingClientRect"]) {
                       return node.getBoundingClientRect();
-                    } else {
+                    } else if (node.parentNode) {
                       return getSaveBoundingClientRect(node.parentNode);
+                    } else {
+                      return ;
                     };
                   }
 
@@ -183,6 +185,8 @@
                           nodeRect.y += t.$btnPane.height() + 5;
                         }
                       }
+
+                      if (!nodeRect) {return};
 
                       posY = nodeRect.y - edRect.y + Math.max(nodeRect.height, 25) + 5;
 
