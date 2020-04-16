@@ -56,6 +56,16 @@
                         return ev.preventDefault();
                     };
 
+                    var setImgMeta = function(img) {
+                      if (!img[0]) return;
+                      $("<img/>", {
+                        load: function(){
+                          img.css({ "min-width": this.width });
+                        },
+                        src: img[0].src
+                      });
+                    }
+
                     function placeResizer() {
                       var $el = $(this),
                           resizer = $('<span class="trumbowyg-resizer"><i class="fa fa-angle-right"/></span>'),
@@ -85,12 +95,10 @@
                         var selector = 'img:not(.resizable)';
                         if (force) selector = 'img';
 
-                        trumbowyg.$ed.find(selector)
-                          .width(function(){
-                            var width = parseInt($(this).attr('width')) || $(this).width();
-                            $(this).css({ "min-width": width });
-                            return width;
-                          })
+                        var imgObj = trumbowyg.$ed.find(selector);
+                        setImgMeta(imgObj);
+
+                        imgObj
                           .resizable(trumbowyg.o.plugins.resizimg.resizable)
                           .on('mousedown', preventDefault)
                           .on('mouseover', placeResizer)
