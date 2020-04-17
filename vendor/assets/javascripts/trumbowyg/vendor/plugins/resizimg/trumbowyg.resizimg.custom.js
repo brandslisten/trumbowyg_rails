@@ -56,6 +56,16 @@
                         return ev.preventDefault();
                     };
 
+                    var setImgMeta = function(imgs) {
+                      if (imgs.length == 0) return;
+
+                      imgs.each(function(_, img) {
+                        $(img).on('load', function() {
+                          $(this).css({ "min-width": this.naturalWidth });
+                        });
+                      });
+                    }
+
                     function placeResizer() {
                       var $el = $(this),
                           resizer = $('<span class="trumbowyg-resizer"><i class="fa fa-angle-right"/></span>'),
@@ -85,12 +95,10 @@
                         var selector = 'img:not(.resizable)';
                         if (force) selector = 'img';
 
-                        trumbowyg.$ed.find(selector)
-                          .width(function(){
-                            var width = parseInt($(this).attr('width')) || $(this).width();
-                            $(this).css({ "min-width": width });
-                            return width;
-                          })
+                        var imgObj = trumbowyg.$ed.find(selector);
+                        setImgMeta(imgObj);
+
+                        imgObj
                           .resizable(trumbowyg.o.plugins.resizimg.resizable)
                           .on('mousedown', preventDefault)
                           .on('mouseover', placeResizer)
@@ -118,9 +126,7 @@
 
                     trumbowyg.$c.on('tbwinit', initResizable.bind(this, true));
                     trumbowyg.$c.on('tbwfocus', initResizable);
-                    trumbowyg.$c.on('tbwchange', function() {
-                      setTimeout(initResizable, 50);
-                    });
+                    trumbowyg.$c.on('tbwchange', initResizable);
                     trumbowyg.$c.on('tbwblur', destroyResizable);
                     trumbowyg.$c.on('tbwclose', destroyResizable);
                 }
