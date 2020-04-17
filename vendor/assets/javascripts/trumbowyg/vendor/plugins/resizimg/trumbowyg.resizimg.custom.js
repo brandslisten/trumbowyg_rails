@@ -56,13 +56,16 @@
                         return ev.preventDefault();
                     };
 
-                    var setImgMeta = function(img) {
-                      if (!img[0]) return;
-                      $("<img/>", {
-                        load: function(){
-                          img.css({ "min-width": this.width });
-                        },
-                        src: img[0].src
+                    var setImgMeta = function(imgs) {
+                      if (imgs.length == 0) return;
+
+                      imgs.each(function(_, img) {
+                        $("<img/>", {
+                          load: function(){
+                            $(img).css({ "min-width": this.width });
+                          },
+                          src: img.src
+                        });
                       });
                     }
 
