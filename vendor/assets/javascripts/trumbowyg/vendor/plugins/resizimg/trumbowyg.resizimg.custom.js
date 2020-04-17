@@ -60,11 +60,8 @@
                       if (imgs.length == 0) return;
 
                       imgs.each(function(_, img) {
-                        $("<img/>", {
-                          load: function(){
-                            $(img).css({ "min-width": this.width });
-                          },
-                          src: img.src
+                        $(img).on('load', function() {
+                          $(this).css({ "min-width": this.naturalWidth });
                         });
                       });
                     }
