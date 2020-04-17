@@ -126,9 +126,7 @@
 
                     trumbowyg.$c.on('tbwinit', initResizable.bind(this, true));
                     trumbowyg.$c.on('tbwfocus', initResizable);
-                    trumbowyg.$c.on('tbwchange', function() {
-                      setTimeout(initResizable, 50);
-                    });
+                    trumbowyg.$c.on('tbwchange', initResizable);
                     trumbowyg.$c.on('tbwblur', destroyResizable);
                     trumbowyg.$c.on('tbwclose', destroyResizable);
                 }
