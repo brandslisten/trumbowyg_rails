@@ -78,16 +78,15 @@
                             var url = pastedData.trim(),
                                 newNode = undefined;
 
-                            $.getJSON(t.o.plugins.pasteOG.endpoint.replace("%{url}", encodeURIComponent(url)), function(data){
-                              var newNode = callbackFn(data, url),
-                                  node = t.doc.getSelection().focusNode,
+                            var insertToEditor = function(newNode) {
+                              var node = t.doc.getSelection().focusNode,
                                   range = t.doc.createRange();
-
                               // when the callback returned nothing, fallback to auto link
                               if (newNode === undefined) {
                                 newNode = $("<a>", {
                                   href: url,
-                                  text: url
+                                  text: url,
+                                  rel: "noopener nofollow noindex"
                                 })[0];
                               }
 
@@ -117,9 +116,16 @@
                               t.saveRange();
                               t.syncCode();
                               t.$c.trigger('tbwchange');
+                            };
+
+                            $.getJSON(t.o.plugins.pasteOG.endpoint.replace("%{url}", encodeURIComponent(url)), function(data){
+                              var newNode = callbackFn(data, url);
+                              insertToEditor(newNode);
+                            }).fail(function() {
+                              insertToEditor()
                             });
                           }
-                        } catch (c) {}
+                        } catch (e) {}
                     });
                 }
             }
