@@ -46,6 +46,7 @@
                               $img.attr('alt', data.description);
                               $img.attr('data-asset-id', data.id);
                               $img.attr('data-copyright', data.copyright_owner);
+                              $img.attr('srcset', data.srcset);
                             });
 
                             $("body").append(node);
