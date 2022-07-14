@@ -41,9 +41,14 @@
                                     return false;
                                 },
                                 onDragEnd: function (ev, $el) {
+                                    var sizeNumber = ($el.width() / $el.parent().width() * 100)
+                                    var newWidth = sizeNumber + '%';
                                     $el.css("cursor", "");
                                     $el.attr('width', $el.width());
-                                    $el.attr('min-width', $el.width());
+                                    $el.attr('min-width', newWidth);
+                                    $el.css('min-width', newWidth);
+                                    $el.css('width', newWidth);
+                                    $el.attr('sizes', sizeNumber + 'vw');
                                     trumbowyg.$c.trigger('tbwchange');
                                     trumbowyg.syncCode();
                                     dragging = false;
@@ -61,7 +66,8 @@
 
                       imgs.each(function(_, img) {
                         $(img).on('load', function() {
-                          $(this).css({ "min-width": this.naturalWidth });
+                          var $el = $(this);
+                          $el.css({ "min-width": ($el.width() / $el.parent().width() * 100) + '%' });
                         });
                       });
                     }
