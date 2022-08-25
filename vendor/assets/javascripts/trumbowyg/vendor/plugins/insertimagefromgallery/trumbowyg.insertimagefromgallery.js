@@ -31,16 +31,18 @@
                         text: '<i class="fa fa-image" style="margin-right: 11px;" /> ' + t.lang['insertImageFromGallery'],
                         hasIcon: false,
                         fn: function () {
+                          if (t.$ed[0].dataset.uuid == undefined) {
+                            t.$ed[0].dataset.uuid = crypto.randomUUID();
+                          }
+                          var editorID = t.o.prefix + t.$ed[0].dataset.uuid
                           t.saveRange();
 
-                          blRemoteModal(t.o.plugins.insertImageFromGallery.serverPath, function(container){
-                            container.find('.modal').modal('show');
-                          });
-
-                          if ($('#' + t.o.prefix + 'insert-from-gallery').length == 0) {
-                            node = $('<div style="display: none important!;" id="' + t.o.prefix + 'insert-from-gallery"></div>');
+                          if ($('#' + editorID).length == 0) {
+                            node = $('<div style="display: none important!;" id="' + editorID + '" data-id="' + editorID + '"></div>');
 
                             node.on("bl.backend.blocks.assets:select", function(e, data) {
+                              if(e.target.dataset.id != editorID) { return console.log(e.target) }
+
                               t.execCmd('insertImage', data.path, undefined, true);
                               var $img = $('img[src="' + data.path + '"]', t.$box);
                               $img.attr('alt', data.description);
@@ -51,6 +53,14 @@
 
                             $("body").append(node);
                           }
+                          var url = t.o.plugins.insertImageFromGallery.serverPath;
+                          url = new URL(url, location)
+                          url.searchParams.set("browse_button_id", editorID)
+                          url = url.toString()
+
+                          blRemoteModal(url, function(container){
+                            container.find('.modal').modal('show');
+                          });
 
                         }
                     };
