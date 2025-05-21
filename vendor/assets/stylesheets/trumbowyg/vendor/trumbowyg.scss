@@ -140,7 +140,7 @@ $slow-transition-duration: 300ms !default;
 
 .trumbowyg-editor[contenteditable=true]:empty:not(:focus)::before {
     content: attr(placeholder);
-    color: #999;
+    color: #666;
     pointer-events: none;
 }
 
