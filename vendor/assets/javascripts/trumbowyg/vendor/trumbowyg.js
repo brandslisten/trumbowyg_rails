@@ -423,7 +423,7 @@ jQuery.trumbowyg = {
                     l = a("<button/>", {
                         type: "button",
                         "class": n + e + "-button " + (o["class"] || "") + (i ? "" : " " + n + "textual-button"),
-                        html: t.hasSvg && i ? '<svg><use xlink:href="' + t.svgPath + "#" + n + (o.ico || e).replace(/([A-Z]+)/g, "-$1").toLowerCase() + '"/></svg>' : t.hideButtonTexts ? "" : o.text || o.title || t.lang[e] || e,
+                        html: t.hasSvg && i ? '<svg aria-hidden="true"><use xlink:href="' + t.svgPath + "#" + n + (o.ico || e).replace(/([A-Z]+)/g, "-$1").toLowerCase() + '"/></svg>' : t.hideButtonTexts ? "" : o.text || o.title || t.lang[e] || e,
                         title: (o.title || o.text || s) + (o.key ? " (Ctrl + " + o.key + ")" : ""),
                         tabindex: -1,
                         mousedown: function() {
@@ -458,7 +458,7 @@ jQuery.trumbowyg = {
                 }), t.tagToButton[(o.tag || e).toLowerCase()] = e, a("<button/>", {
                     type: "button",
                     "class": n + e + "-dropdown-button" + (o.ico ? " " + n + o.ico + "-button" : ""),
-                    html: t.hasSvg && r ? '<svg><use xlink:href="' + t.svgPath + "#" + n + (o.ico || e).replace(/([A-Z]+)/g, "-$1").toLowerCase() + '"/></svg>' + (o.text || o.title || t.lang[e] || e) : o.text || o.title || t.lang[e] || e,
+                    html: t.hasSvg && r ? '<svg aria-hidden="true"><use xlink:href="' + t.svgPath + "#" + n + (o.ico || e).replace(/([A-Z]+)/g, "-$1").toLowerCase() + '"/></svg>' + (o.text || o.title || t.lang[e] || e) : o.text || o.title || t.lang[e] || e,
                     title: o.key ? " (Ctrl + " + o.key + ")" : null,
                     style: o.style || null,
                     mousedown: function() {
